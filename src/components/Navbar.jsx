@@ -2,8 +2,7 @@ import { ChevronDown, Menu, Search, ShoppingBag } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
 import Sidebar from "./Sidebar";
-import Login from "../views/Login";
-import Register from "../views/Register";
+import { dataTerst } from "../data/dataTest";
 
 function Navbar() {
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
@@ -40,8 +39,13 @@ function Navbar() {
             <Link to="/faqs" className="text-sm">
               FAQs
             </Link>
-            <button className="border border-gray-300 rounded-full p-2 hover:bg-gray-100">
-              <ShoppingBag />
+            <button className="border border-gray-300 rounded-full p-2.5 relative hover:bg-gray-100">
+              <Link to="/cart">
+                <ShoppingBag />
+                <div className="w-5 h-5 bg-red-500 flex justify-center items-center  text-white  font-medium rounded-full absolute top-0 right-0">
+                  <p>{dataTerst.length}</p>
+                </div>
+              </Link>
             </button>
             <Link
               to="../Login"
@@ -58,12 +62,12 @@ function Navbar() {
           </div>
           {/* ---------------------------End Right: Link and cart-------------------------------------- */}
         </div>
-      </div> 
+      </div>
       {/* Line2 */}
-      <div className="flex flex-col md:flex-row items-center gap-2">
+      <div className="w-full flex flex-col md:flex-row items-center gap-2 justify-around">
         {/*------------------- Line2:Button#1---------------------- */}
-        <div>
-          <button className="flex items-center justify-between w-[200px] px-5 py-2 rounded-full bg-gray-50 border-none  text-sm font-medium text-gray-700 border-gray-100 hover:shadow-md transition-all duration-200">
+        <div className="flex gap-x-4">
+          <button className="flex items-center justify-between w-50 px-5 py-2 rounded-full bg-gray-50 border-none  text-sm font-medium text-gray-700 border-gray-100 hover:shadow-md transition-all duration-200">
             Categories
             {/* ส่วนของไอคอนลูกศร */}
             <div className="P-1 rounded-full bg-gray-50 flex items-center justify-center transition-transform duration-200">
@@ -83,11 +87,8 @@ function Navbar() {
               </svg>
             </div>
           </button>
-        </div>
-        {/*------------------- Line2:Button#1---------------------- */}
-        {/*------------------- Line2:Button#2---------------------- */}
-        <div>
-          <button className="flex items-center justify-between w-[200px] px-5 py-2 bg-white rounded-full shadow-sm border text-sm font-medium text-gray-700 border-gray-100 hover:shadow-md transition-all duration-200">
+
+          <button className="flex items-center justify-between w-50 px-5 py-2 bg-white rounded-full shadow-sm border text-sm font-medium text-gray-700 border-gray-100 hover:shadow-md transition-all duration-200">
             New Products
             {/* ส่วนของไอคอนลูกศร */}
             <div className="P-1 rounded-full bg-gray-50 flex items-center justify-center transition-transform duration-200">
@@ -108,7 +109,7 @@ function Navbar() {
             </div>
           </button>
         </div>
-        {/*------------------- Line2:Button#2---------------------- */}
+        {/*------------------- Line2:Button#1---------------------- */}
         {/*------------------- Line2:Search------------------------ */}
         <div className="relative flex items-center w-full max-w-xs">
           <input
@@ -145,8 +146,8 @@ function Navbar() {
             Children
           </button>
         </div>
-      </div>   
+      </div>
     </nav>
   );
-};
+}
 export default Navbar;
