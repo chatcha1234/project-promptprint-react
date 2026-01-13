@@ -34,10 +34,7 @@ const App = () => {
         <Route path="about" element={<About />} />
         <Route path="faqs" element={<Faqs />} />
         <Route path="membership" element={<Membership />} />
-      </Route>
-
-      {/* Auth layout from develop */}
-      <Route path="/" element={<AuthLayout />}>
+        {/* Auth Pages moved to Main Layout */}
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Register />} />
         <Route path="forgetpassword" element={<ForgetPassword />} />
