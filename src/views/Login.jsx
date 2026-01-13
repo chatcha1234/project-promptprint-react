@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+
 export default function Login() {
   return (
     <div
@@ -10,14 +11,14 @@ export default function Login() {
         <input
           type="email"
           placeholder="Enter Your Email"
-          className="bg-white py-2 px-3 w-80 rounded-xl"
+          className="bg-white py-2 px-3 w-80 rounded-xl outline-none"
           required
         />
         <input
           type="password"
           placeholder="Password"
-          minlength={8}
-          maxlength={20}
+          minLength={8}
+          maxLength={20}
           className="bg-white py-2 px-3 w-80 rounded-xl"
           required
         />

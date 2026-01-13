@@ -1,19 +1,23 @@
-import React from 'react';
-import { Outlet } from 'react-router-dom';
-import Navbar from './Navbar';
-import Login from '../views/Login';
-import Register from '../views/Register';
+import React from "react";
+import { Outlet } from "react-router-dom";
+import Navbar from "./Navbar";
+import Sidebar from "./Sidebar";
 
 function Layout() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
+    <div className="bg-gray-50 h-screen flex overflow-hidden">
+      {/* Sidebar - Persistent on Desktop */}
+      <Sidebar variant="static" />
 
-      <main className="w-full px-4 py-6">
-        <Outlet />
-      </main>
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col min-w-0">
+        <Navbar />
+        <div className="flex-1 overflow-y-auto p-8">
+          <Outlet />
+        </div>
+      </div>
     </div>
   );
-};
+}
 
 export default Layout;
