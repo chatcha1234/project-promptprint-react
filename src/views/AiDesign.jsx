@@ -9,12 +9,16 @@ const AiDesign = () => {
   const [generatedImage, setGeneratedImage] = useState(null);
   const [enhancedPrompt, setEnhancedPrompt] = useState(null);
   const [selectedStyle, setSelectedStyle] = useState("Realistic");
-  const [removeBackground, setRemoveBackground] = useState(false);
+  const [isRemovingBg, setIsRemovingBg] = useState(false);
+  const [originalImage, setOriginalImage] = useState(null);
+  const [transparentImage, setTransparentImage] = useState(null);
 
   const handleGenerate = async () => {
     if (!prompt) return;
     setIsGenerating(true);
-    setGeneratedImage(null); // Clear previous image
+    setGeneratedImage(null);
+    setOriginalImage(null);
+    setTransparentImage(null); // Clear previous image
 
     const apiUrl = `${
       import.meta.env.VITE_API_URL || "http://localhost:5000"
@@ -30,7 +34,6 @@ const AiDesign = () => {
         body: JSON.stringify({
           prompt,
           style: selectedStyle,
-          removeBackground,
           userId: localStorage.getItem("userId"),
         }),
       });
@@ -41,6 +44,7 @@ const AiDesign = () => {
       if (response.ok) {
         if (data.imageUrl) {
           setGeneratedImage(data.imageUrl);
+          setOriginalImage(data.imageUrl); // Store original
           setEnhancedPrompt(data.enhancedPrompt);
         } else {
           alert("Server returned success but no image URL.");
@@ -56,47 +60,120 @@ const AiDesign = () => {
     }
   };
 
+  const handleDownload = () => {
+    if (!generatedImage) return;
+    const link = document.createElement("a");
+    link.href = generatedImage;
+    link.download = `promptprint-design-${Date.now()}.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleUseDesign = () => {
+    alert("Design selected! (Feature coming soon: Add to Cart)");
+  };
+
+  const handleRemoveBackground = async () => {
+    if (!generatedImage) return;
+    setIsRemovingBg(true);
+
+    const apiUrl = `${
+      import.meta.env.VITE_API_URL || "http://localhost:5000"
+    }/api/remove-background`;
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ imageUrl: generatedImage }),
+      });
+
+      const data = await response.json();
+      if (data.transparentImageUrl) {
+        setTransparentImage(data.transparentImageUrl);
+        setGeneratedImage(data.transparentImageUrl); // Auto-switch to transparent
+      } else {
+        alert("Failed to remove background.");
+      }
+    } catch (error) {
+      console.error("BG Removal Error:", error);
+      alert("Error removing background.");
+    } finally {
+      setIsRemovingBg(false);
+    }
+  };
+
   return (
     <div className="min-h-screen lg:h-screen lg:overflow-hidden bg-gray-50 flex flex-col">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1 flex flex-col h-full overflow-hidden pb-4">
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 flex-1 min-h-0">
           {/* Left Column: Preview */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex items-center justify-center h-full relative overflow-hidden">
-            <div className="relative w-full max-w-md aspect-3/4">
-              <div className="w-full h-full min-h-[400px] lg:min-h-0 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden relative group">
-                {isGenerating ? (
-                  <div className="flex flex-col items-center gap-4 animate-in fade-in zoom-in duration-300">
-                    <div className="relative">
-                      <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <Wand2 className="w-6 h-6 text-blue-600 animate-pulse" />
-                      </div>
-                    </div>
-                    <span className="text-gray-500 font-medium">
-                      Creating your Image...
-                    </span>
-                  </div>
-                ) : generatedImage ? (
-                  <img
-                    src={generatedImage}
-                    alt="Generated Design"
-                    className="w-full h-full object-contain shadow-2xl transition-transform duration-500 hover:scale-[1.02]"
-                    onError={(e) => {
-                      e.target.style.display = "none";
-                      alert("Image failed to load");
-                    }}
-                  />
-                ) : (
-                  <div className="flex flex-col items-center text-gray-400 gap-4">
-                    <div className="w-20 h-20 bg-gray-200 rounded-2xl flex items-center justify-center">
-                      <Sparkles className="w-8 h-8 opacity-50" />
-                    </div>
-                    <p className="text-sm font-medium">
-                      Your imagination appears here
-                    </p>
-                  </div>
+          {/* Left Column: Preview & Sidebar */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col h-full relative overflow-hidden">
+            {/* Toggle Tabs (Visible if we have an original image) */}
+            {originalImage && (
+              <div className="flex justify-center gap-2 mb-4 shrink-0">
+                <button
+                  onClick={() => setGeneratedImage(originalImage)}
+                  className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${
+                    generatedImage === originalImage
+                      ? "bg-gray-900 text-white shadow-md"
+                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  }`}
+                >
+                  Original
+                </button>
+                {transparentImage && (
+                  <button
+                    onClick={() => setGeneratedImage(transparentImage)}
+                    className={`px-4 py-2 rounded-full text-sm font-semibold transition-all flex items-center gap-2 ${
+                      generatedImage === transparentImage
+                        ? "bg-blue-600 text-white shadow-md"
+                        : "bg-blue-50 text-blue-600 hover:bg-blue-100"
+                    }`}
+                  >
+                    <Sparkles className="w-3 h-3" />
+                    Transparent
+                  </button>
                 )}
+              </div>
+            )}
+
+            {/* Main Preview Area */}
+            <div className="flex-1 flex items-center justify-center min-h-0 relative overflow-hidden">
+              <div className="relative w-full max-w-md aspect-3/4">
+                <div className="w-full h-full min-h-[400px] lg:min-h-0 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden relative group">
+                  {isGenerating ? (
+                    <div className="flex flex-col items-center gap-4 animate-in fade-in zoom-in duration-300 bg-white/90 p-6 rounded-2xl">
+                      <div className="relative">
+                        <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <Wand2 className="w-6 h-6 text-blue-600 animate-pulse" />
+                        </div>
+                      </div>
+                      <span className="text-gray-500 font-medium">
+                        Creating your Image...
+                      </span>
+                    </div>
+                  ) : generatedImage ? (
+                    <img
+                      src={generatedImage}
+                      alt="Generated Design"
+                      className="w-full h-full object-contain shadow-2xl transition-transform duration-500 hover:scale-[1.02]"
+                    />
+                  ) : (
+                    <div className="flex flex-col items-center text-gray-400 gap-4 bg-gray-50/50 p-6 rounded-2xl">
+                      <div className="w-20 h-20 bg-gray-200 rounded-2xl flex items-center justify-center">
+                        <Sparkles className="w-8 h-8 opacity-50" />
+                      </div>
+                      <p className="text-sm font-medium">
+                        Your imagination appears here
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -140,22 +217,32 @@ const AiDesign = () => {
                 </div>
               </div>
 
-              {/* Background Options */}
-              <div className="mb-6 lg:mb-8 flex items-center gap-3 shrink-0">
-                <input
-                  type="checkbox"
-                  id="removeBg"
-                  checked={removeBackground}
-                  onChange={(e) => setRemoveBackground(e.target.checked)}
-                  className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500 border-gray-300"
-                />
-                <label
-                  htmlFor="removeBg"
-                  className="text-gray-700 font-medium cursor-pointer select-none"
-                >
-                  Transparent Background (Better for T-Shirts)
-                </label>
-              </div>
+              {/* Background Removal Button (Visible only if transparent version not yet created) */}
+              {generatedImage && !transparentImage && (
+                <div className="mb-6 lg:mb-8 shrink-0">
+                  <button
+                    onClick={handleRemoveBackground}
+                    disabled={isRemovingBg}
+                    className={`flex items-center justify-center gap-2 w-full py-3 rounded-xl border-2 font-semibold transition-all ${
+                      isRemovingBg
+                        ? "bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed"
+                        : "border-blue-100 text-blue-600 hover:bg-blue-50 hover:border-blue-200"
+                    }`}
+                  >
+                    {isRemovingBg ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></div>
+                        Removing Background...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-4 h-4" />
+                        Remove Background (Magic)
+                      </>
+                    )}
+                  </button>
+                </div>
+              )}
 
               {/* Styles */}
               <div className="mb-6 lg:mb-8 shrink-0">
@@ -187,7 +274,7 @@ const AiDesign = () => {
               </div>
 
               {/* Generate Button */}
-              <div className="shrink-0">
+              <div className="shrink-0 space-y-3">
                 <button
                   onClick={handleGenerate}
                   disabled={!prompt || isGenerating}
@@ -199,6 +286,26 @@ const AiDesign = () => {
                 >
                   {isGenerating ? "Generating..." : "Generate Artwork"}
                 </button>
+
+                {/* Actions for Generated Image */}
+                {generatedImage && (
+                  <div className="grid grid-cols-2 gap-3 animate-in slide-in-from-bottom-2">
+                    <button
+                      onClick={handleDownload}
+                      className="flex items-center justify-center gap-2 py-3 rounded-xl border-2 border-gray-200 font-semibold text-gray-700 hover:border-gray-300 hover:bg-gray-50 transition-all"
+                    >
+                      <Download className="w-5 h-5" />
+                      Download
+                    </button>
+                    <button
+                      onClick={handleUseDesign}
+                      className="flex items-center justify-center gap-2 py-3 rounded-xl bg-green-600 text-white font-bold shadow-lg shadow-green-500/20 hover:bg-green-700 transition-all transform hover:-translate-y-0.5"
+                    >
+                      <Share2 className="w-5 h-5" />
+                      Use Design
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
