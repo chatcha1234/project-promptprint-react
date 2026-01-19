@@ -19,6 +19,7 @@ import Faqs from "./views/Faqs";
 import Membership from "./views/Membership";
 import ForgetPassword from "./views/ForgetPassword";
 import ResetPassword from "./views/ResetPassword";
+import LandingPage from "./views/LandingPage****";
 
 const App = () => {
   return (
