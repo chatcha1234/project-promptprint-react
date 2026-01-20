@@ -3,62 +3,41 @@ import ProductCard from "../components/ProductCard";
 
 const Home = () => {
   // Dummy Data
-  const products = [
-    {
-      id: 1,
-      title: "เสื้อยืด",
-      price: 850,
-      originalPrice: 35.0,
-      discount: 17,
-      category: "Men",
-      image:
-        "https://images.unsplash.com/photo-1581655353564-df123a1eb820?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      isNew: true,
-    },
-    {
-      id: 2,
-      title: "สินค้า",
-      price: 0,
-      category: "Unisex",
-      image:
-        "https://images.unsplash.com/photo-1578768076057-3d98fb27da29?q=80&w=2570&auto=format&fit=crop",
-    },
-    {
-      id: 3,
-      title: "ถุงผ้า",
-      price: 250,
-      category: "Accessories",
-      image:
-        "https://images.unsplash.com/photo-1544816155-12df9643f363?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-    },
-    {
-      id: 4,
-      title: "เสื้อเด็ก",
-      price: 150,
-      originalPrice: 24.0,
-      category: "Kids",
-      image:
-        "https://images.unsplash.com/photo-1519278470570-c7500beee821?q=80&w=2574&auto=format&fit=crop",
-      isNew: true,
-    },
-  ];
+  // Dummy Data (Removed)
+  const products = [];
 
   return (
     <div className="w-full">
       {/* Featured Products Section */}
-      <div className="mt-8">
+      <div>
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-2xl font-bold text-gray-900">
             Featured Products
           </h2>
-          <button className="text-blue-600 font-medium hover:text-blue-800 transition-colors">
-            View All &rarr;
-          </button>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {products.map((product) => (
             <ProductCard key={product.id} product={product} />
+          ))}
+          {/* Empty Placeholders (Skeleton) */}
+          {[...Array(6)].map((_, index) => (
+            <div
+              key={`skeleton-${index}`}
+              className="group relative bg-white rounded-2xl border border-gray-100 p-3 shadow-xs hover:shadow-xl transition-all duration-300 animate-pulse"
+            >
+              {/* Image Skeleton */}
+              <div className="aspect-square w-full bg-gray-200 rounded-xl mb-4" />
+
+              {/* Content Skeleton */}
+              <div className="space-y-3 px-1">
+                <div className="h-4 bg-gray-200 rounded w-2/3" />
+                <div className="flex justify-between items-center pt-2">
+                  <div className="h-5 bg-gray-200 rounded w-1/4" />
+                  <div className="h-8 w-8 bg-gray-200 rounded-full" />
+                </div>
+              </div>
+            </div>
           ))}
         </div>
       </div>

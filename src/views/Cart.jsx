@@ -6,7 +6,25 @@ const Cart = () => {
   const userId = localStorage.getItem("userId");
   const navigate = useNavigate();
 
-  const fetchCart = React.useCallback(async () => {
+  useEffect(() => {
+    if (userId) {
+      const loadCart = async () => {
+        try {
+          const response = await fetch(
+            `${import.meta.env.VITE_API_URL}/api/cart/${userId}`
+          );
+          const data = await response.json();
+          setCart(data);
+        } catch (error) {
+          console.error("Error fetching cart:", error);
+        }
+      };
+      loadCart();
+    }
+  }, [userId]);
+
+  const fetchCart = async () => {
+    if (!userId) return;
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/cart/${userId}`
@@ -16,13 +34,7 @@ const Cart = () => {
     } catch (error) {
       console.error("Error fetching cart:", error);
     }
-  }, [userId]);
-
-  useEffect(() => {
-    if (userId) {
-      fetchCart();
-    }
-  }, [userId, fetchCart]);
+  };
 
   const updateQuantity = async (productId, newQuantity) => {
     if (newQuantity < 1) return;
@@ -79,7 +91,7 @@ const Cart = () => {
 
   return (
     <div className="container mx-auto p-6 min-h-screen bg-black text-white">
-      <h1 className="text-3xl font-bold mb-8 bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
+      <h1 className="text-3xl font-bold mb-8 bg-linear-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
         Your Shopping Cart
       </h1>
 
@@ -117,7 +129,7 @@ const Cart = () => {
                     {item.productId?.description}
                   </p>
                   <p className="text-green-400 font-mono mt-1">
-                    ${item.productId?.price}
+                    ฿{item.productId?.price}
                   </p>
                 </div>
 
@@ -176,7 +188,7 @@ const Cart = () => {
               </h2>
               <div className="flex justify-between mb-2 text-gray-400">
                 <span>Subtotal</span>
-                <span>${calculateTotal()}</span>
+                <span>฿{calculateTotal()}</span>
               </div>
               <div className="flex justify-between mb-4 text-gray-400">
                 <span>Shipping</span>
@@ -184,11 +196,11 @@ const Cart = () => {
               </div>
               <div className="flex justify-between text-2xl font-bold mb-6 pt-4 border-t border-gray-800">
                 <span>Total</span>
-                <span className="text-green-400">${calculateTotal()}</span>
+                <span className="text-green-400">฿{calculateTotal()}</span>
               </div>
               <button
                 onClick={() => navigate("/checkout")}
-                className="w-full py-4 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl font-bold text-lg hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg shadow-green-900/20"
+                className="w-full py-4 bg-linear-to-r from-green-500 to-emerald-600 rounded-xl font-bold text-lg hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg shadow-green-900/20"
               >
                 Proceed to Checkout
               </button>

@@ -4,12 +4,12 @@ const About = () => {
   return (
     <main className="w-full min-h-dvn mt-20 max-md:mt-40 ">
       {/* เนื้อหาเกี่ยวกับprojectที่ทำ */}
-      <section className=" w-full min-h-screen grid grid-cols-4 rows-4 gap-4 max-md:flex flex-col">
+      <section className=" w-full min-h-screen grid grid-cols-5 rows-4 gap-4 max-md:flex flex-col">
         <div className="col-span-2 row-span-4 flex flex-col justify-between  bg-white p-6 rounded-4xl shadow-sm mt-4 ">
           <h1 className="mt-6 font-bold text-8xl text-shadow-lg text-shadow-gray-500 max-md:text-4xl max-md:my-4 ">
-            Pronpt Print Shop
+            Prompt Print
           </h1>
-          <p className="font-light text-2xl text-balance  max-md:text-[20px] ">
+          <p className="font-light text-2xl text-balance  max-md:text-[20px ">
             At Prompt Print Shop, imagination has no limits. We seamlessly blend
             Prompt Engineering with your creative vision. By producing every
             item on-demand, we prioritize sustainability and eliminate
@@ -18,33 +18,33 @@ const About = () => {
             perfect.
           </p>
         </div>
-        <div className="flex flex-col col-start-3 col-span-2 row-start-1 row-span-3  bg-[url(/about-bg.png)] bg-no-repeat bg-cover bg-center rounded-4xl mt-4">
+        <div className="flex flex-col col-span-3 col-start-3  row-start-1 row-span-3  bg-[url(/about-bg.png)] bg-no-repeat bg-cover bg-center rounded-4xl mt-4">
           <div className="h-2/5 flex items-center justify-center ">
             <h2 className=" text-gray-100 text-center font-bold text-8xl text-shadow-lg text-shadow-black max-md:text-6xl">
               Products
             </h2>
           </div>
-          <div className="h-3/5 w-full flex gap-2 justify-center items-center max-md: flex-wrap ">
+          <div className="h-3/5 w-full flex gap-1 justify-evenly items-center max-md:flex-wrap ">
             <img
               src="/products1.png"
               alt="hoodie"
-              className="w-60 h-[85%]  hover:scale-110"
+              className="w-[25%] h-[85%] object-cover object-[60%_60%]  hover:scale-110"
             />
             <img
               src="/products2.png"
               alt="hoodie"
-              className="w-60 h-[85%]  hover:scale-110"
+              className="w-[35%] h-[85%]  hover:scale-110"
             />
             <img
               src="/products3.png"
               alt="hoodie"
-              className="w-60 h-[85%]  hover:scale-110"
+              className="w-[35%] h-[85%]  hover:scale-110"
             />
           </div>
         </div>
-        <div className="col-start-3 col-span-2 row-start-4 row-span-1  bg-white  rounded-4xl shadow-sm max-md:h-auto w-full ">
+        <div className="col-start-3 col-span-3 row-start-4 row-span-1  bg-white  rounded-4xl shadow-sm max-md:h-auto w-full ">
           <div className="w-full h-full flex justify-evenly items-center ">
-            <h2 className="text-6xl font-bold text-shadow-lg text-shadow-gray-500 max-md:text-4xl">
+            <h2 className="text-6xl font-bold text-shadow-lg text-shadow-gray-500 max-md:text-4xl max-md:p-1.5">
               Development team
             </h2>
           </div>

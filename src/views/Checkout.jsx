@@ -40,19 +40,63 @@ const Checkout = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Simulate Payment Processing
-    setTimeout(() => {
-      alert("Payment Successful! Thank you for your order.");
-      // Clear Cart Logic here if needed, or just redirect
-      navigate("/products");
-    }, 1500);
+
+    try {
+      if (!cart || !cart.items.length) {
+        alert("Your cart is empty!");
+        return;
+      }
+
+      // Prepare items for Order model
+      const orderItems = cart.items.map((item) => ({
+        productId: item.productId._id,
+        name: item.productId.name,
+        price: item.productId.price,
+        quantity: item.quantity,
+      }));
+
+      // Create Order
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/orders`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId,
+            customerDetails: {
+              name: formData.fullName,
+              email: formData.email,
+              address: formData.address,
+              city: formData.city,
+              zip: formData.zip,
+            },
+            items: orderItems,
+            totalAmount: parseFloat(calculateTotal()),
+          }),
+        }
+      );
+
+      if (response.ok) {
+        alert("Payment Successful! Thank you for your order.");
+        // Clear Cart Logic (Optional Frontend Clear)
+        setCart(null);
+        navigate("/products");
+      } else {
+        alert("Failed to place order.");
+      }
+    } catch (error) {
+      console.error("Checkout Error:", error);
+      alert("Error processing payment.");
+    }
   };
 
   return (
     <div className="container mx-auto p-6 min-h-screen bg-black text-white">
-      <h1 className="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
+      <h1 className="text-3xl font-bold mb-8 text-center bg-linear-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
         Secure Checkout
       </h1>
 
@@ -201,9 +245,9 @@ const Checkout = () => {
 
             <button
               type="submit"
-              className="w-full mt-6 py-4 bg-gradient-to-r from-yellow-500 to-orange-600 rounded-xl font-bold text-lg hover:from-yellow-600 hover:to-orange-700 transition-all shadow-lg shadow-orange-900/20"
+              className="w-full mt-6 py-4 bg-linear-to-r from-yellow-500 to-orange-600 rounded-xl font-bold text-lg hover:from-yellow-600 hover:to-orange-700 transition-all shadow-lg shadow-orange-900/20"
             >
-              Pay Now ${calculateTotal()}
+              Pay Now ฿{calculateTotal()}
             </button>
           </form>
         </div>
@@ -229,14 +273,14 @@ const Checkout = () => {
                   <p className="text-sm text-gray-400">Qty: {item.quantity}</p>
                 </div>
                 <span className="font-mono text-green-400">
-                  ${(item.productId?.price * item.quantity).toFixed(2)}
+                  ฿{(item.productId?.price * item.quantity).toFixed(2)}
                 </span>
               </div>
             ))}
           <div className="border-t border-gray-800 pt-6">
             <div className="flex justify-between text-2xl font-bold">
               <span>Total</span>
-              <span className="text-green-400">${calculateTotal()}</span>
+              <span className="text-green-400">฿{calculateTotal()}</span>
             </div>
           </div>
         </div>

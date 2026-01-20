@@ -1,18 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, ShoppingBag, User, Heart, LogOut } from "lucide-react";
+import {
+  Search,
+  ShoppingBag,
+  User,
+  Heart,
+  LogOut,
+  ChevronDown,
+  PlusCircle,
+  Package,
+  Users,
+  ClipboardList,
+  Menu,
+} from "lucide-react";
 
-const Navbar = () => {
+const Navbar = ({ onMenuClick }) => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => localStorage.getItem("username"));
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check for logged in user
-    const username = localStorage.getItem("username");
-    if (username) {
-      setUser(username);
-    }
+    // Removed redundant user check that caused cascading renders
 
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 0);
@@ -24,6 +33,7 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.clear();
     setUser(null);
+    setIsProfileOpen(false);
     navigate("/");
     window.location.reload();
   };
@@ -41,7 +51,17 @@ const Navbar = () => {
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             {/* Left area */}
-            <div className="flex items-center gap-4"></div>
+            <div className="flex items-center gap-4">
+              {/* Mobile Menu Button - STRICTLY HIDDEN ON DESKTOP */}
+              <div className="lg:hidden">
+                <button
+                  onClick={onMenuClick}
+                  className="p-2 -ml-2 text-gray-600 hover:text-gray-900"
+                >
+                  <Menu className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
 
             {/* Center: Search Bar */}
             <div className="hidden md:flex flex-1 max-w-2xl mx-8">
@@ -85,18 +105,73 @@ const Navbar = () => {
               </Link>
 
               {user ? (
-                <div className="flex items-center gap-3">
-                  <span className="text-sm font-semibold text-gray-700 hidden sm:block">
-                    Hi, {user}
-                  </span>
+                <div className="relative">
                   <button
-                    onClick={handleLogout}
-                    className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-full text-sm font-medium hover:bg-red-100 transition-all"
-                    title="Sign Out"
+                    onClick={() => setIsProfileOpen(!isProfileOpen)}
+                    className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded-full transition-all border border-transparent hover:border-gray-200"
                   >
-                    <LogOut className="w-4 h-4" />
-                    <span className="hidden sm:inline">Logout</span>
+                    <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600">
+                      <User className="w-5 h-5" />
+                    </div>
+                    <span className="text-sm font-semibold text-gray-700 hidden sm:block">
+                      {user}
+                    </span>
+                    <ChevronDown
+                      className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${
+                        isProfileOpen ? "rotate-180" : ""
+                      }`}
+                    />
                   </button>
+
+                  {/* Dropdown Menu */}
+                  {isProfileOpen && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 animate-in fade-in slide-in-from-top-2 duration-200 z-50">
+                      {localStorage.getItem("role") === "admin" && (
+                        <>
+                          <Link
+                            to="/admin/products"
+                            onClick={() => setIsProfileOpen(false)}
+                            className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                          >
+                            <PlusCircle className="w-4 h-4" />
+                            Add Product
+                          </Link>
+                          <Link
+                            to="/admin/manage-products" // New page (we need to create this)
+                            onClick={() => setIsProfileOpen(false)}
+                            className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                          >
+                            <ShoppingBag className="w-4 h-4" />
+                            Manage Products
+                          </Link>
+                          <Link
+                            to="/admin/orders"
+                            onClick={() => setIsProfileOpen(false)}
+                            className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                          >
+                            <ClipboardList className="w-4 h-4" />
+                            Orders
+                          </Link>
+                          <Link
+                            to="/admin/users"
+                            onClick={() => setIsProfileOpen(false)}
+                            className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                          >
+                            <Users className="w-4 h-4" />
+                            Manage Users
+                          </Link>
+                        </>
+                      )}
+
+                      <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 text-left transition-colors"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        Logout
+                      </button>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <Link
@@ -139,11 +214,6 @@ const Navbar = () => {
                 </button>
               ))}
               <div className="flex-1" />
-              <div className="flex items-center text-gray-500 text-xs gap-4">
-                <span>Free Shipping on Orders over $50</span>
-                <span>•</span>
-                <span>Global Delivery</span>
-              </div>
             </div>
           </div>
         </div>
