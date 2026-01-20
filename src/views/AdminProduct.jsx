@@ -88,7 +88,7 @@ export default function AdminProduct() {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Product Name */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+              <label className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
                 <Type className="w-4 h-4" /> Product Name
               </label>
               <input
@@ -103,7 +103,7 @@ export default function AdminProduct() {
 
             {/* Description */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+              <label className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
                 <FileText className="w-4 h-4" /> Description
               </label>
               <textarea
@@ -120,7 +120,7 @@ export default function AdminProduct() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Price */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
                   <DollarSign className="w-4 h-4" /> Price (THB)
                 </label>
                 <input
@@ -136,7 +136,7 @@ export default function AdminProduct() {
 
               {/* Tag */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
                   <Tag className="w-4 h-4" /> Tag (Optional)
                 </label>
                 <input
@@ -151,7 +151,7 @@ export default function AdminProduct() {
 
             {/* Image URL */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+              <label className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
                 <Upload className="w-4 h-4" /> Product Image
               </label>
 
