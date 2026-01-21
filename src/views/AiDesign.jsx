@@ -29,56 +29,78 @@ const AiDesign = () => {
 
   // Initialize Fabric Canvas
   useEffect(() => {
-    if (canvasRef.current && !fabricCanvasRef.current) {
-      console.log("🎨 Initializing Fabric Canvas...");
+    // Don't initialize if already exists
+    if (fabricCanvasRef.current) {
+      console.log("🎨 Fabric Canvas already exists, skipping init");
+      return;
+    }
 
-      const canvas = new Canvas(canvasRef.current, {
-        width: 500,
-        height: 600,
-        backgroundColor: "#f9fafb",
-        selection: false,
+    if (!canvasRef.current) {
+      console.log("⚠️ Canvas DOM element not ready");
+      return;
+    }
+
+    console.log("🎨 Initializing Fabric Canvas...");
+
+    const canvas = new Canvas(canvasRef.current, {
+      width: 500,
+      height: 600,
+      backgroundColor: "#f9fafb",
+      selection: false,
+    });
+
+    fabricCanvasRef.current = canvas;
+    setIsCanvasReady(true);
+
+    // Load T-Shirt Background
+    const shirtImg = new Image();
+    shirtImg.src = "/products3.png";
+    shirtImg.onload = () => {
+      // Check if canvas still exists (in case of unmount)
+      if (!fabricCanvasRef.current) return;
+
+      const fabricImg = new FabricImage(shirtImg);
+      // Scale shirt to fit canvas
+      const scale =
+        Math.min(
+          canvas.width / fabricImg.width,
+          canvas.height / fabricImg.height,
+        ) * 0.9;
+
+      fabricImg.scale(scale);
+      fabricImg.set({
+        left: canvas.width / 2,
+        top: canvas.height / 2,
+        originX: "center",
+        originY: "center",
+        selectable: false,
+        evented: false,
       });
 
-      fabricCanvasRef.current = canvas;
-      setIsCanvasReady(true);
+      canvas.add(fabricImg);
+      canvas.sendToBack(fabricImg);
+      canvas.renderAll();
+      console.log("✅ T-shirt background loaded");
+    };
 
-      // Load T-Shirt Background
-      const shirtImg = new Image();
-      shirtImg.src = "/products3.png";
-      shirtImg.onload = () => {
-        const fabricImg = new FabricImage(shirtImg);
-        // Scale shirt to fit canvas
-        const scale =
-          Math.min(
-            canvas.width / fabricImg.width,
-            canvas.height / fabricImg.height,
-          ) * 0.9;
-
-        fabricImg.scale(scale);
-        fabricImg.set({
-          left: canvas.width / 2,
-          top: canvas.height / 2,
-          originX: "center",
-          originY: "center",
-          selectable: false,
-          evented: false,
-        });
-
-        canvas.add(fabricImg);
-        canvas.sendToBack(fabricImg);
-        canvas.renderAll();
-      };
-
-      return () => {
-        console.log("🧹 Disposing Fabric Canvas");
-        canvas.dispose();
-      };
-    }
+    return () => {
+      console.log("🧹 Disposing Fabric Canvas");
+      canvas.dispose();
+      fabricCanvasRef.current = null; // Clear the ref!
+      setIsCanvasReady(false);
+    };
   }, []);
 
   // Handle Adding/Updating Design on Canvas
   useEffect(() => {
-    if (!fabricCanvasRef.current || !generatedImage) return;
+    if (!fabricCanvasRef.current || !generatedImage || !isCanvasReady) {
+      console.log("⏳ Waiting for canvas or image...", {
+        hasCanvas: !!fabricCanvasRef.current,
+        hasImage: !!generatedImage,
+        isReady: isCanvasReady,
+      });
+      return;
+    }
 
     const canvas = fabricCanvasRef.current;
 
@@ -96,6 +118,12 @@ const AiDesign = () => {
     console.log("🎨 Loading generated image onto canvas:", generatedImage);
 
     imgObj.onload = () => {
+      // Double-check canvas still exists after async image load
+      if (!fabricCanvasRef.current) {
+        console.log("⚠️ Canvas was disposed before image loaded");
+        return;
+      }
+
       console.log("✅ Image loaded successfully, creating Fabric object...");
       const designImg = new FabricImage(imgObj);
       const scale = (canvas.width * 0.4) / designImg.width;
@@ -119,7 +147,10 @@ const AiDesign = () => {
       canvas.setActiveObject(designImg);
       designImg.bringToFront(); // Ensure it's on top of the shirt
       canvas.renderAll();
-      console.log("🖌️ Canvas rendered with new design.");
+      console.log(
+        "🖌️ Canvas rendered with new design. Objects:",
+        canvas.getObjects().length,
+      );
     };
 
     imgObj.onerror = (err) => {
@@ -144,9 +175,7 @@ const AiDesign = () => {
     setOriginalImage(null);
     setTransparentImage(null); // Clear previous image
 
-    const apiUrl = `${
-      import.meta.env.VITE_API_URL || "http://localhost:5000"
-    }/api/generate-design`;
+    const apiUrl = "/api/generate-design";
     console.log("🚀 Sending request to:", apiUrl);
 
     try {
@@ -236,9 +265,7 @@ const AiDesign = () => {
     if (!generatedImage) return;
     setIsRemovingBg(true);
 
-    const apiUrl = `${
-      import.meta.env.VITE_API_URL || "http://localhost:5000"
-    }/api/remove-background`;
+    const apiUrl = "/api/remove-background";
 
     try {
       const response = await fetch(apiUrl, {
