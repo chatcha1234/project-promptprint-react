@@ -2,6 +2,7 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
+import Footer from "./Footer";
 
 import { useState } from "react";
 
@@ -25,6 +26,7 @@ function Layout() {
         <Navbar onMenuClick={() => setIsSidebarOpen(true)} />
         <div className="flex-1 overflow-y-auto p-4 sm:p-8">
           <Outlet />
+          <Footer />
         </div>
       </div>
     </div>
