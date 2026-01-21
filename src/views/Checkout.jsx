@@ -5,34 +5,49 @@ const Checkout = () => {
   const navigate = useNavigate();
   const [userId] = useState(localStorage.getItem("userId"));
   const [cart, setCart] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [processing, setProcessing] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     address: "",
     city: "",
     zip: "",
-    cardNumber: "",
-    expiry: "",
-    cvc: "",
   });
 
   useEffect(() => {
     if (userId) {
       // Fetch cart for summary
-      fetch(`${import.meta.env.VITE_API_URL}/api/cart/${userId}`)
+      fetch(`/api/cart/${userId}`)
         .then((res) => res.json())
-        .then((data) => setCart(data))
-        .catch((err) => console.error(err));
+        .then((data) => {
+          setCart(data);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.error(err);
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
     }
   }, [userId]);
+
+  // Helper to get product data (handles both regular and custom products)
+  const getProductData = (item) => {
+    if (item.customProduct && item.customProduct.isCustom) {
+      return item.customProduct;
+    }
+    return item.productId;
+  };
 
   const calculateTotal = () => {
     if (!cart || !cart.items) return 0;
     return cart.items
-      .reduce(
-        (total, item) => total + (item.productId?.price || 0) * item.quantity,
-        0
-      )
+      .reduce((total, item) => {
+        const product = getProductData(item);
+        return total + (product?.price || 0) * item.quantity;
+      }, 0)
       .toFixed(2);
   };
 
@@ -42,57 +57,95 @@ const Checkout = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setProcessing(true);
 
     try {
       if (!cart || !cart.items.length) {
         alert("Your cart is empty!");
+        setProcessing(false);
         return;
       }
 
       // Prepare items for Order model
-      const orderItems = cart.items.map((item) => ({
-        productId: item.productId._id,
-        name: item.productId.name,
-        price: item.productId.price,
-        quantity: item.quantity,
-      }));
+      const orderItems = cart.items.map((item) => {
+        const product = getProductData(item);
+        const isCustom = item.customProduct?.isCustom;
+
+        return {
+          productId: isCustom ? null : item.productId?._id,
+          customProduct: isCustom ? item.customProduct : null,
+          name: product?.name || "Unknown Product",
+          price: product?.price || 0,
+          quantity: item.quantity,
+        };
+      });
 
       // Create Order
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/orders`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
+      const response = await fetch("/api/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId,
+          customerDetails: {
+            name: formData.fullName,
+            email: formData.email,
+            address: formData.address,
+            city: formData.city,
+            zip: formData.zip,
           },
-          body: JSON.stringify({
-            userId,
-            customerDetails: {
-              name: formData.fullName,
-              email: formData.email,
-              address: formData.address,
-              city: formData.city,
-              zip: formData.zip,
-            },
-            items: orderItems,
-            totalAmount: parseFloat(calculateTotal()),
-          }),
-        }
-      );
+          items: orderItems,
+          totalAmount: parseFloat(calculateTotal()),
+        }),
+      });
 
       if (response.ok) {
+        // Clear cart from database
+        try {
+          await fetch(`/api/cart/${userId}/clear`, { method: "DELETE" });
+        } catch {
+          console.log("Cart clear failed, but order was placed");
+        }
+
         alert("Payment Successful! Thank you for your order.");
-        // Clear Cart Logic (Optional Frontend Clear)
         setCart(null);
         navigate("/products");
       } else {
-        alert("Failed to place order.");
+        const errorData = await response.json();
+        alert(errorData.error || "Failed to place order.");
       }
     } catch (error) {
       console.error("Checkout Error:", error);
       alert("Error processing payment.");
+    } finally {
+      setProcessing(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="container mx-auto p-6 min-h-screen bg-black text-white flex items-center justify-center">
+        <div className="text-xl">Loading checkout...</div>
+      </div>
+    );
+  }
+
+  if (!userId) {
+    return (
+      <div className="container mx-auto p-6 min-h-screen bg-black text-white flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-xl mb-4">Please login to checkout</p>
+          <button
+            onClick={() => navigate("/login")}
+            className="px-6 py-2 bg-yellow-500 rounded-lg hover:bg-yellow-400 transition-colors"
+          >
+            Login
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto p-6 min-h-screen bg-black text-white">
@@ -186,68 +239,18 @@ const Checkout = () => {
               </div>
             </div>
 
-            <h2 className="text-xl font-semibold mt-8 mb-6 flex items-center gap-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-yellow-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-                />
-              </svg>
-              Payment Details
-            </h2>
-            <div>
-              <label className="text-gray-400 text-sm block mb-1">
-                Card Number
-              </label>
-              <input
-                required
-                type="text"
-                name="cardNumber"
-                placeholder="0000 0000 0000 0000"
-                onChange={handleChange}
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 focus:outline-none focus:border-yellow-500 transition-colors"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="text-gray-400 text-sm block mb-1">
-                  Expiry Date
-                </label>
-                <input
-                  required
-                  type="text"
-                  name="expiry"
-                  placeholder="MM/YY"
-                  onChange={handleChange}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 focus:outline-none focus:border-yellow-500 transition-colors"
-                />
-              </div>
-              <div>
-                <label className="text-gray-400 text-sm block mb-1">CVC</label>
-                <input
-                  required
-                  type="text"
-                  name="cvc"
-                  placeholder="123"
-                  onChange={handleChange}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 focus:outline-none focus:border-yellow-500 transition-colors"
-                />
-              </div>
-            </div>
-
             <button
               type="submit"
-              className="w-full mt-6 py-4 bg-linear-to-r from-yellow-500 to-orange-600 rounded-xl font-bold text-lg hover:from-yellow-600 hover:to-orange-700 transition-all shadow-lg shadow-orange-900/20"
+              disabled={processing}
+              className={`w-full mt-6 py-4 rounded-xl font-bold text-lg transition-all shadow-lg shadow-orange-900/20 ${
+                processing
+                  ? "bg-gray-600 cursor-not-allowed"
+                  : "bg-linear-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700"
+              }`}
             >
-              Pay Now ฿{calculateTotal()}
+              {processing
+                ? "Processing..."
+                : `Place Order ฿${calculateTotal()}`}
             </button>
           </form>
         </div>
@@ -255,34 +258,57 @@ const Checkout = () => {
         {/* Summary Section */}
         <div className="space-y-6">
           <h2 className="text-2xl font-bold">In Your Cart</h2>
-          {cart &&
-            cart.items.map((item) => (
-              <div
-                key={item._id}
-                className="bg-gray-900 p-4 rounded-xl border border-gray-800 flex items-center gap-4"
-              >
-                {item.productId?.imageUrl && (
-                  <img
-                    src={item.productId.imageUrl}
-                    alt={item.productId.name}
-                    className="w-16 h-16 object-cover rounded-lg bg-gray-800"
-                  />
-                )}
-                <div className="flex-1">
-                  <h3 className="font-bold">{item.productId?.name}</h3>
-                  <p className="text-sm text-gray-400">Qty: {item.quantity}</p>
+          {cart && cart.items.length > 0 ? (
+            <>
+              {cart.items.map((item) => {
+                const product = getProductData(item);
+                const isCustom = item.customProduct?.isCustom;
+
+                return (
+                  <div
+                    key={item._id}
+                    className={`bg-gray-900 p-4 rounded-xl border flex items-center gap-4 ${
+                      isCustom ? "border-purple-500" : "border-gray-800"
+                    }`}
+                  >
+                    {product?.imageUrl && (
+                      <img
+                        src={product.imageUrl}
+                        alt={product.name}
+                        className="w-16 h-16 object-cover rounded-lg bg-gray-800"
+                      />
+                    )}
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-bold">{product?.name}</h3>
+                        {isCustom && (
+                          <span className="text-xs bg-purple-600 text-white px-2 py-0.5 rounded-full">
+                            AI Design
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-sm text-gray-400">
+                        Qty: {item.quantity}
+                      </p>
+                    </div>
+                    <span className="font-mono text-green-400">
+                      ฿{((product?.price || 0) * item.quantity).toFixed(2)}
+                    </span>
+                  </div>
+                );
+              })}
+              <div className="border-t border-gray-800 pt-6">
+                <div className="flex justify-between text-2xl font-bold">
+                  <span>Total</span>
+                  <span className="text-green-400">฿{calculateTotal()}</span>
                 </div>
-                <span className="font-mono text-green-400">
-                  ฿{(item.productId?.price * item.quantity).toFixed(2)}
-                </span>
               </div>
-            ))}
-          <div className="border-t border-gray-800 pt-6">
-            <div className="flex justify-between text-2xl font-bold">
-              <span>Total</span>
-              <span className="text-green-400">฿{calculateTotal()}</span>
+            </>
+          ) : (
+            <div className="bg-gray-900 p-8 rounded-xl border border-gray-800 text-center">
+              <p className="text-gray-400">Your cart is empty</p>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

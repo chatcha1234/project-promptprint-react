@@ -78,7 +78,7 @@ const AiDesign = () => {
       });
 
       canvas.add(fabricImg);
-      canvas.sendToBack(fabricImg);
+      canvas.sendObjectToBack(fabricImg);
       canvas.renderAll();
       console.log("✅ T-shirt background loaded");
     };
@@ -145,7 +145,7 @@ const AiDesign = () => {
 
       canvas.add(designImg);
       canvas.setActiveObject(designImg);
-      designImg.bringToFront(); // Ensure it's on top of the shirt
+      canvas.bringObjectToFront(designImg); // Ensure it's on top of the shirt
       canvas.renderAll();
       console.log(
         "🖌️ Canvas rendered with new design. Objects:",
@@ -213,7 +213,7 @@ const AiDesign = () => {
     }
   };
 
-  const handleUseDesign = () => {
+  const handleUseDesign = async () => {
     if (!fabricCanvasRef.current) return;
 
     // Export Canvas to Data URL (capture the look)
@@ -224,7 +224,6 @@ const AiDesign = () => {
     });
 
     const customProduct = {
-      _id: `custom-${Date.now()}`,
       name: "Custom AI T-Shirt",
       description: `Custom design: ${prompt}`,
       price: 590, // Fixed price for custom tee
@@ -232,25 +231,27 @@ const AiDesign = () => {
       isCustom: true,
     };
 
-    // Add to Cart Logic (Mock)
+    // Add to Cart via API
     const userId = localStorage.getItem("userId");
     if (userId) {
       try {
-        const cartItem = {
-          productId: customProduct,
-          quantity: 1,
-        };
+        const response = await fetch("/api/cart/custom", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId,
+            customProduct,
+            quantity: 1,
+          }),
+        });
 
-        // Temporary: Save to local storage to simulate cart addition
-        const existingCart =
-          JSON.parse(localStorage.getItem(`temp_cart_${userId}`)) || [];
-        existingCart.push(cartItem);
-        localStorage.setItem(
-          `temp_cart_${userId}`,
-          JSON.stringify(existingCart),
-        );
-
-        navigate("/cart");
+        if (response.ok) {
+          alert("Added to cart!");
+          navigate("/cart");
+        } else {
+          const data = await response.json();
+          alert(data.error || "Failed to add to cart");
+        }
       } catch (err) {
         console.error(err);
         alert("Failed to add to cart");
@@ -479,8 +480,8 @@ const AiDesign = () => {
                       onClick={handleUseDesign}
                       className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-green-600 text-white font-bold shadow-lg shadow-green-500/20 hover:bg-green-700 transition-all transform hover:-translate-y-0.5"
                     >
-                      <Share2 className="w-5 h-5" />
-                      Use This Design for T-Shirt
+                      <ShoppingCart className="w-5 h-5" />
+                      Add to Cart
                     </button>
                   </div>
                 )}

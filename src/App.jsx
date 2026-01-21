@@ -25,7 +25,15 @@ import LandingPage from "./views/LandingPage"; //New code from Juang
 const App = () => {
   return (
     <Routes>
-      {/* Main layout */}
+      {/* Auth pages - Full width with navbar only, no sidebar */}
+      <Route element={<AuthLayout />}>
+        <Route path="login" element={<Login />} />
+        <Route path="signup" element={<Register />} />
+        <Route path="forgetpassword" element={<ForgetPassword />} />
+        <Route path="resetpassword" element={<ResetPassword />} />
+      </Route>
+
+      {/* Main layout with sidebar */}
       <Route path="/" element={<Layout />}>
         <Route index element={<LandingPage />} /> //New code from Juang
         <Route path="Home" element={<Home />} /> //New code from Juang
@@ -55,10 +63,6 @@ const App = () => {
         <Route path="about" element={<About />} />
         <Route path="faqs" element={<Faqs />} />
         <Route path="membership" element={<Membership />} />
-        <Route path="login" element={<Login />} />
-        <Route path="signup" element={<Register />} />
-        <Route path="forgetpassword" element={<ForgetPassword />} />
-        <Route path="resetpassword" element={<ResetPassword />} />
       </Route>
 
       {/* 404 */}

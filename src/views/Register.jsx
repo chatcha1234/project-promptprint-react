@@ -1,7 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
+import { useState } from "react";
 
 export default function Register() {
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
+
   const loginWithGoogle = useGoogleLogin({
     onSuccess: (tokenResponse) => {
       console.log("Google Login Success:", tokenResponse);
@@ -12,13 +16,63 @@ export default function Register() {
     },
   });
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    const formData = new FormData(e.target);
+    const username = formData.get("username");
+    const email = formData.get("email");
+    const password = formData.get("password");
+    const confirmPassword = formData.get("confirmPassword");
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/register`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username, email, password }),
+        },
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("Registration Successful! Please login.");
+        navigate("/login");
+      } else {
+        setError(data.error || "Registration failed");
+      }
+    } catch (err) {
+      console.error("Register Error:", err);
+      setError("Something went wrong. Please try again.");
+    }
+  };
+
   return (
     <div
       className="flex justify-center items-center min-h-screen bg-no-repeat bg-cover bg-center"
       style={{ backgroundImage: "url('/bg.jpg')" }}
     >
-      <form className="flex flex-col gap-4 p-18 rounded-3xl backdrop-blur-xs shadow-xl min-w-[350px]">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-4 p-18 rounded-3xl backdrop-blur-xs shadow-xl min-w-[350px]"
+      >
         <h2 className="font-bold text-3xl text-center text-white">Sign up</h2>
+
+        {error && (
+          <p className="text-red-500 text-center font-bold bg-white/80 p-2 rounded">
+            {error}
+          </p>
+        )}
 
         <input
           type="text"
@@ -48,6 +102,7 @@ export default function Register() {
 
         <input
           type="password"
+          name="confirmPassword"
           placeholder="Confirm Password"
           className="bg-white py-2 px-3 w-80 rounded-xl"
           required
@@ -55,14 +110,14 @@ export default function Register() {
 
         <button
           type="submit"
-          className="bg-blue-400 text-white font-medium py-2 rounded-xl"
+          className="bg-blue-400 text-white font-medium py-2 rounded-xl hover:bg-blue-500 transition-colors"
         >
           Sign Up
         </button>
 
         <span className="text-white">
           Already have an account?{" "}
-          <Link to="/Login" className="underline hover:text-violet-500">
+          <Link to="/login" className="underline hover:text-violet-500">
             Login
           </Link>
         </span>

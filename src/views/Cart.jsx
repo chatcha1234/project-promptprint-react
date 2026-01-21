@@ -3,89 +3,50 @@ import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const [cart, setCart] = useState(null);
+  const [loading, setLoading] = useState(true);
   const userId = localStorage.getItem("userId");
   const navigate = useNavigate();
 
   useEffect(() => {
     if (userId) {
-      const loadCart = async () => {
-        try {
-          const response = await fetch(
-            `${import.meta.env.VITE_API_URL}/api/cart/${userId}`,
-          );
-          const data = await response.json();
-          setCart(data);
-        } catch (error) {
-          console.error("Error fetching cart:", error);
-        }
-      };
-      loadCart();
+      fetchCart();
+    } else {
+      setLoading(false);
     }
   }, [userId]);
 
   const fetchCart = async () => {
     if (!userId) return;
+    setLoading(true);
     try {
-      // 1. Fetch persistent cart from API
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/cart/${userId}`,
-      );
-      let data = await response.json();
-
-      // 2. Merge with temporary cart from localStorage (Custom AI Designs)
-      const tempCart =
-        JSON.parse(localStorage.getItem(`temp_cart_${userId}`)) || [];
-
-      if (tempCart.length > 0) {
-        // If API returns null/empty, init structure
-        if (!data || !data.items) {
-          data = { userId, items: [] };
-        }
-
-        // Combine items (simple append for now)
-        // Mark temp items so we don't try to update them via API that expects real Product IDs
-        const enrichedTempItems = tempCart.map((item) => ({
-          ...item,
-          _id: `temp-${Date.now()}-${Math.random()}`, // Fake ID for React key
-        }));
-
-        data.items = [...data.items, ...enrichedTempItems];
-      }
-
+      const response = await fetch(`/api/cart/${userId}`);
+      const data = await response.json();
       setCart(data);
     } catch (error) {
       console.error("Error fetching cart:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const updateQuantity = async (productId, newQuantity) => {
+  // Helper to get product data (handles both regular and custom products)
+  const getProductData = (item) => {
+    if (item.customProduct && item.customProduct.isCustom) {
+      return item.customProduct;
+    }
+    return item.productId;
+  };
+
+  const updateQuantity = async (itemId, newQuantity) => {
     if (newQuantity < 1) return;
 
-    // Check for custom product ID convention
-    if (typeof productId === "string" && productId.startsWith("custom-")) {
-      const tempCart =
-        JSON.parse(localStorage.getItem(`temp_cart_${userId}`)) || [];
-      const updatedTempCart = tempCart.map((item) => {
-        if (item.productId._id === productId) {
-          return { ...item, quantity: newQuantity };
-        }
-        return item;
-      });
-      localStorage.setItem(
-        `temp_cart_${userId}`,
-        JSON.stringify(updatedTempCart),
-      );
-      fetchCart();
-      return;
-    }
-
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/cart`, {
+      const response = await fetch("/api/cart", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           userId,
-          productId,
+          itemId,
           quantity: newQuantity,
         }),
       });
@@ -97,28 +58,11 @@ const Cart = () => {
     }
   };
 
-  const removeItem = async (productId) => {
-    if (typeof productId === "string" && productId.startsWith("custom-")) {
-      const tempCart =
-        JSON.parse(localStorage.getItem(`temp_cart_${userId}`)) || [];
-      const updatedTempCart = tempCart.filter(
-        (item) => item.productId._id !== productId,
-      );
-      localStorage.setItem(
-        `temp_cart_${userId}`,
-        JSON.stringify(updatedTempCart),
-      );
-      fetchCart();
-      return;
-    }
-
+  const removeItem = async (itemId) => {
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/cart/${userId}/${productId}`,
-        {
-          method: "DELETE",
-        },
-      );
+      const response = await fetch(`/api/cart/${userId}/${itemId}`, {
+        method: "DELETE",
+      });
       if (response.ok) {
         fetchCart();
       }
@@ -130,10 +74,10 @@ const Cart = () => {
   const calculateTotal = () => {
     if (!cart || !cart.items) return 0;
     return cart.items
-      .reduce(
-        (total, item) => total + (item.productId?.price || 0) * item.quantity,
-        0,
-      )
+      .reduce((total, item) => {
+        const product = getProductData(item);
+        return total + (product?.price || 0) * item.quantity;
+      }, 0)
       .toFixed(2);
   };
 
@@ -143,6 +87,14 @@ const Cart = () => {
         Please start shopping to create a session.
       </div>
     );
+
+  if (loading) {
+    return (
+      <div className="container mx-auto p-6 min-h-screen bg-black text-white flex items-center justify-center">
+        <div className="text-xl">Loading cart...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto p-6 min-h-screen bg-black text-white">
@@ -164,75 +116,89 @@ const Cart = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Items List */}
           <div className="lg:col-span-2 space-y-4">
-            {cart.items.map((item) => (
-              <div
-                key={item._id}
-                className="bg-gray-900 p-4 rounded-xl border border-gray-800 flex flex-col sm:flex-row items-center gap-4"
-              >
-                {item.productId?.imageUrl && (
-                  <img
-                    src={item.productId.imageUrl}
-                    alt={item.productId.name}
-                    className="w-24 h-24 object-cover rounded-lg bg-gray-800"
-                  />
-                )}
-                <div className="flex-1 text-center sm:text-left">
-                  <h3 className="font-bold text-lg">
-                    {item.productId?.name || "Product unavailable"}
-                  </h3>
-                  <p className="text-gray-400 text-sm">
-                    {item.productId?.description}
-                  </p>
-                  <p className="text-green-400 font-mono mt-1">
-                    ฿{item.productId?.price}
-                  </p>
-                </div>
+            {cart.items.map((item) => {
+              const product = getProductData(item);
+              const isCustom = item.customProduct?.isCustom;
 
-                <div className="flex items-center gap-3 bg-gray-800 rounded-lg p-1">
-                  <button
-                    onClick={() =>
-                      updateQuantity(item.productId._id, item.quantity - 1)
-                    }
-                    className="w-8 h-8 flex items-center justify-center bg-gray-700 hover:bg-gray-600 rounded text-lg font-bold"
-                    disabled={item.quantity <= 1}
-                  >
-                    -
-                  </button>
-                  <span className="w-8 text-center font-bold">
-                    {item.quantity}
-                  </span>
-                  <button
-                    onClick={() =>
-                      updateQuantity(item.productId._id, item.quantity + 1)
-                    }
-                    className="w-8 h-8 flex items-center justify-center bg-gray-700 hover:bg-gray-600 rounded text-lg font-bold"
-                  >
-                    +
-                  </button>
-                </div>
-
-                <button
-                  onClick={() => removeItem(item.productId._id)}
-                  className="p-2 text-red-500 hover:bg-red-500/10 rounded-lg transition-colors"
-                  title="Remove Item"
+              return (
+                <div
+                  key={item._id}
+                  className={`bg-gray-900 p-4 rounded-xl border flex flex-col sm:flex-row items-center gap-4 ${
+                    isCustom ? "border-purple-500" : "border-gray-800"
+                  }`}
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  {product?.imageUrl && (
+                    <img
+                      src={product.imageUrl}
+                      alt={product.name}
+                      className="w-24 h-24 object-cover rounded-lg bg-gray-800"
                     />
-                  </svg>
-                </button>
-              </div>
-            ))}
+                  )}
+                  <div className="flex-1 text-center sm:text-left">
+                    <div className="flex items-center gap-2 justify-center sm:justify-start">
+                      <h3 className="font-bold text-lg">
+                        {product?.name || "Product unavailable"}
+                      </h3>
+                      {isCustom && (
+                        <span className="text-xs bg-purple-600 text-white px-2 py-0.5 rounded-full">
+                          AI Design
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-gray-400 text-sm line-clamp-2">
+                      {product?.description}
+                    </p>
+                    <p className="text-green-400 font-mono mt-1">
+                      ฿{product?.price}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-3 bg-gray-800 rounded-lg p-1">
+                    <button
+                      onClick={() =>
+                        updateQuantity(item._id, item.quantity - 1)
+                      }
+                      className="w-8 h-8 flex items-center justify-center bg-gray-700 hover:bg-gray-600 rounded text-lg font-bold"
+                      disabled={item.quantity <= 1}
+                    >
+                      -
+                    </button>
+                    <span className="w-8 text-center font-bold">
+                      {item.quantity}
+                    </span>
+                    <button
+                      onClick={() =>
+                        updateQuantity(item._id, item.quantity + 1)
+                      }
+                      className="w-8 h-8 flex items-center justify-center bg-gray-700 hover:bg-gray-600 rounded text-lg font-bold"
+                    >
+                      +
+                    </button>
+                  </div>
+
+                  <button
+                    onClick={() => removeItem(item._id)}
+                    className="p-2 text-red-500 hover:bg-red-500/10 rounded-lg transition-colors"
+                    title="Remove Item"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              );
+            })}
           </div>
 
           {/* Summary */}
