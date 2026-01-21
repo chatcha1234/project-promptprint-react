@@ -98,7 +98,7 @@ const Cart = () => {
 
   return (
     <div className="container mx-auto p-6 min-h-screen  text-white">
-      <h1 className="text-3xl font-bold mb-8 bg-linear-to-r from-blue-600 to-cyan-400 bg-clip-text text-transparent">
+      <h1 className="text-3xl font-bold mb-9 bg-linear-to-r from-blue-600 to-cyan-400 bg-clip-text text-transparent">
         Your Shopping Cart
       </h1>
 
@@ -221,7 +221,7 @@ const Cart = () => {
               </div>
               <button
                 onClick={() => navigate("/checkout")}
-                className="w-full py-4 bg-linear-to-r from-blue-600 to-cyan-400 rounded-xl font-bold text-lg hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg shadow-green-900/20"
+                className="w-full py-4 bg-linear-to-r from-blue-600 to-cyan-400 rounded-xl font-bold text-lg hover:from-cyan-400 hover:to-blue-600 transition-all shadow-lg shadow-green-900/20"
               >
                 Proceed to Checkout
               </button>
