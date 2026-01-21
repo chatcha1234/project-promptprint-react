@@ -187,7 +187,7 @@ const Navbar = ({ onMenuClick }) => {
         </div>
 
         {/* Secondary Navigation (Categories) */}
-        <div className="border-t border-gray-100 bg-white/50 backdrop-blur-sm hidden md:block">
+        {/* <div className="border-t border-gray-100 bg-white/50 backdrop-blur-sm hidden md:block">
           <div className="w-full px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-8 h-12 text-sm overflow-x-auto no-scrollbar">
               {[
@@ -216,7 +216,7 @@ const Navbar = ({ onMenuClick }) => {
               <div className="flex-1" />
             </div>
           </div>
-        </div>
+        </div> */}
       </nav>
     </>
   );

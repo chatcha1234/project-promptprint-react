@@ -26,26 +26,35 @@ const Sidebar = ({ isOpen, onClose, variant = "drawer" }) => {
       path: "/ai-design",
       icon: <Sparkles className="w-5 h-5 text-purple-500" />,
     },
-    { name: "Men", path: "/category/men", icon: <Shirt className="w-5 h-5" /> },
+    {
+      name: "Men",
+      path: "/category/men",
+      icon: <Shirt className="w-5 h-5" />,
+      disabled: true,
+    },
     {
       name: "Women",
       path: "/category/women",
       icon: <Shirt className="w-5 h-5" />,
+      disabled: true,
     },
     {
       name: "Kids",
       path: "/category/kids",
       icon: <Baby className="w-5 h-5" />,
+      disabled: true,
     },
     {
       name: "Accessories",
       path: "/category/accessories",
       icon: <Watch className="w-5 h-5" />,
+      disabled: true,
     },
     {
       name: "Promotions",
       path: "/promotions",
       icon: <Tag className="w-5 h-5" />,
+      disabled: true,
     },
   ];
 
@@ -126,14 +135,23 @@ const Sidebar = ({ isOpen, onClose, variant = "drawer" }) => {
               return (
                 <Link
                   key={item.name}
-                  to={item.path}
-                  onClick={isDrawer ? onClose : undefined}
+                  to={item.disabled ? "#" : item.path}
+                  onClick={(e) => {
+                    if (item.disabled) {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      return;
+                    }
+                    if (isDrawer) onClose();
+                  }}
                   title={isCollapsed ? item.name : ""}
                   className={`group flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
                     isActive
                       ? "bg-red-50 text-red-600 font-medium"
                       : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                  } ${isCollapsed ? "justify-center" : ""}`}
+                  } ${item.disabled ? "opacity-40 cursor-not-allowed pointer-events-none" : ""} ${
+                    isCollapsed ? "justify-center" : ""
+                  }`}
                 >
                   <span
                     className={`transition-colors shrink-0 ${
