@@ -3,7 +3,6 @@ import ProductCard from "../components/ProductCard";
 
 const Home = () => {
   // Dummy Data
-  // Dummy Data (Removed)
   const products = [];
 
   return (
