@@ -51,52 +51,47 @@ const About = () => {
         </div>
       </section>
       {/* ข้อมูลของเกี่ยวกับทีม */}
-      <section className=" w-full min-h-screen flex flex-col">
+      <section className=" w-full min-h-screen flex flex-col text-white font-medium">
         <div className=" bg-gray-900 bg-no-repeat bg-cover bg-center shadow-md w-full h-auto py-4  my-4 rounded-4xl flex justify-center items-center gap-4 flex-wrap ">
-          <div className="w-70 h-100 bg-white shadow-xl rounded-4xl flex flex-col justify-evenly items-center">
+          <div className="w-70 h-100 bg-linear-to-t from-gray-900 to-purple-700 shadow-xl rounded-4xl flex flex-col justify-evenly items-center">
             <img
-              src=""
+              src="chut.png"
               alt=""
-              className="bg-white rounded-full h-50 w-50 border border-gray-500"
+              className="bg-white rounded-full h-50 w-50 border border-gray-500 object-cover"
             />
             <h2>07_Chatchawan(Chut/ชัด)</h2>
-            <p>L:</p>
           </div>
-          <div className="w-70 h-100 bg-white shadow-xl rounded-4xl flex flex-col justify-evenly items-center ">
+          <div className="w-70 h-100 bg-linear-to-t from-gray-900 to-purple-700 shadow-xl rounded-4xl flex flex-col justify-evenly items-center ">
             <img
-              src=""
+              src="Mik.jpg"
               alt=""
-              className="bg-white rounded-full h-50 w-50 border border-gray-500"
+              className="bg-white rounded-full h-50 w-50 border border-gray-500 object-cover object-bottom"
             />
             <h2>15_Kamolthep (Mik / มิก)</h2>
-            <p>L:</p>
           </div>
-          <div className="w-70 h-100 bg-white shadow-xl rounded-4xl flex flex-col justify-evenly items-center ">
+          <div className="w-70 h-100 bg-linear-to-t from-gray-900 to-purple-700 shadow-xl rounded-4xl flex flex-col justify-evenly items-center ">
             <img
-              src=""
+              src="krit.JPG"
               alt=""
-              className="bg-white rounded-full h-50 w-50 border border-gray-500"
+              className="bg-white rounded-full h-50 w-50 border border-gray-500 object-cover"
             />
             <h2>16_krittiphong(krit/กฤษ)</h2>
-            <p>L:</p>
           </div>
-          <div className="w-70 h-100 bg-white shadow-xl rounded-4xl flex flex-col justify-evenly items-center ">
+          <div className="w-70 h-100 bg-linear-to-t from-gray-900 to-purple-700 shadow-xl rounded-4xl flex flex-col justify-evenly items-center ">
             <img
-              src=""
+              src="Ying.png"
               alt=""
-              className="bg-white rounded-full h-50 w-50 border border-gray-500"
+              className="bg-white rounded-full h-50 w-50 border border-gray-500 object-cover"
             />
             <h2>20_Mullika(Ying/หญิง)</h2>
-            <p>L:</p>
           </div>
-          <div className="w-70 h-100 bg-white shadow-xl rounded-4xl flex flex-col justify-evenly items-center ">
+          <div className="w-70 h-100 bg-linear-to-t from-gray-900 to-purple-700 shadow-xl rounded-4xl flex flex-col justify-evenly items-center ">
             <img
-              src=""
+              src="juang.png"
               alt=""
-              className="bg-white rounded-full h-50 w-50 border border-gray-500"
+              className="bg-white rounded-full h-50 w-50 border border-gray-500 object-cover"
             />
             <h2>37_Sirirat (Juang/จวง)</h2>
-            <p>L:</p>
           </div>
         </div>
       </section>
