@@ -21,6 +21,7 @@ import Membership from "./views/Membership";
 import ForgetPassword from "./views/ForgetPassword";
 import ResetPassword from "./views/ResetPassword";
 import LandingPage from "./views/LandingPage"; //New code from Juang
+import UserOrders from "./views/UserOrders"; // หน้า My Orders
 
 const App = () => {
   const isAuthenticated = !!localStorage.getItem("token");
@@ -99,6 +100,14 @@ const App = () => {
           element={
             <ProtectedRoute>
               <AiDesign />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="orders/:userId"
+          element={
+            <ProtectedRoute>
+              <UserOrders />
             </ProtectedRoute>
           }
         />
