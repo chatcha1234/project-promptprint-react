@@ -204,7 +204,7 @@ const AdminOrderList = () => {
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col md:flex-row">
       {/* ===== Sidebar Filters ===== */}
-      <div className="w-full md:w-64 bg-white border-r border-gray-200 p-6 flex flex-col gap-4">
+      <div className="w-full md:w-64 bg-white border-r border-gray-200 p-6 flex flex-col gap-4 sticky top-0 md:h-screen md:overflow-y-auto z-10">
         <h2 className="text-xl font-bold flex items-center gap-2 mb-2">
           <Filter className="w-5 h-5 text-emerald-600" />
           ตัวกรองสถานะ
@@ -214,10 +214,10 @@ const AdminOrderList = () => {
             <button
               key={filter}
               onClick={() => setActiveFilter(filter)}
-              className={`w-full text-left px-4 py-3 rounded-xl transition-all flex items-center justify-between group ${
+              className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-300 ease-out flex items-center justify-between group active:scale-95 ${
                 activeFilter === filter
-                  ? "bg-emerald-50 text-emerald-700 font-bold shadow-xs border border-emerald-100"
-                  : "text-gray-600 hover:bg-gray-50 hover:pl-5"
+                  ? "bg-emerald-50 text-emerald-700 font-bold shadow-sm border border-emerald-100 translate-x-2"
+                  : "text-gray-600 hover:bg-gray-50 hover:pl-6 hover:shadow-xs"
               }`}
             >
               <div className="flex items-center gap-3">
