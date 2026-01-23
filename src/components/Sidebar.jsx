@@ -20,7 +20,8 @@ const Sidebar = ({ isOpen, onClose, variant = "drawer" }) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   const menuItems = [
-    { name: "Home", path: "/", icon: <Home className="w-5 h-5" /> },
+    { name: "Home", path: "/home", icon: <Home className="w-5 h-5" /> },
+    { name: "Shop", path: "/shop", icon: <Tag className="w-5 h-5" /> }, // Added Shop
     {
       name: "AI Design",
       path: "/ai-design",
