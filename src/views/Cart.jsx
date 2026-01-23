@@ -223,7 +223,7 @@ const Cart = () => {
                           updateQuantity(item._id, item.quantity - 1)
                         }
                         disabled={item.quantity <= 1}
-                        className="w-9 h-9 flex items-center justify-center bg-white hover:bg-gray-50 rounded-lg border border-gray-200 transition-colors disabled:opacity-50"
+                        className="w-9 h-9 flex items-center justify-center bg-white hover:bg-gray-50 rounded-lg border border-gray-200 transition-colors disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
                       >
                         <Minus className="w-4 h-4" />
                       </button>
@@ -234,7 +234,7 @@ const Cart = () => {
                         onClick={() =>
                           updateQuantity(item._id, item.quantity + 1)
                         }
-                        className="w-9 h-9 flex items-center justify-center bg-white hover:bg-gray-50 rounded-lg border border-gray-200 transition-colors"
+                        className="w-9 h-9 flex items-center justify-center bg-white hover:bg-gray-50 rounded-lg border border-gray-200 transition-colors cursor-pointer"
                       >
                         <Plus className="w-4 h-4" />
                       </button>
@@ -243,7 +243,7 @@ const Cart = () => {
                     {/* Delete Button */}
                     <button
                       onClick={() => removeItem(item._id)}
-                      className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
                       title="ลบสินค้า"
                     >
                       <Trash2 className="w-5 h-5" />
