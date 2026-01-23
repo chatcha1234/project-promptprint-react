@@ -177,7 +177,7 @@ const Checkout = () => {
             <ArrowLeft className="w-6 h-6" />
           </Link>
           <div>
-            <h1 className="text-3xl font-bold bg-linear-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold bg-linear-to-r from-emerald-500 to-green-600 bg-clip-text text-transparent">
               ชำระเงิน
             </h1>
             <p className="text-gray-500 text-sm mt-1">

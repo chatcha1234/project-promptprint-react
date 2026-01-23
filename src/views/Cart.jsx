@@ -141,7 +141,7 @@ const Cart = () => {
         {/* ===== Header ===== */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-3xl font-bold bg-linear-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent mb-2">
+            <h1 className="text-3xl font-bold bg-linear-to-r from-emerald-500 to-green-600 bg-clip-text text-transparent mb-2">
               ตะกร้าสินค้า
             </h1>
             <p className="text-gray-500">รายการสินค้าที่คุณเลือกไว้</p>
