@@ -8,6 +8,12 @@ import {
   Truck,
   AlertTriangle,
   X,
+  MapPin,
+  Mail,
+  User,
+  ShoppingBag,
+  Calendar,
+  CreditCard,
 } from "lucide-react";
 
 const AdminOrderList = () => {
@@ -20,6 +26,12 @@ const AdminOrderList = () => {
     orderId: null,
     newStatus: null,
     currentStatus: null,
+  });
+
+  // ===== State สำหรับ View Order Modal =====
+  const [viewModal, setViewModal] = useState({
+    isOpen: false,
+    order: null,
   });
 
   // ===== Fetch Orders =====
@@ -65,6 +77,22 @@ const AdminOrderList = () => {
       orderId: null,
       newStatus: null,
       currentStatus: null,
+    });
+  };
+
+  // ===== เปิด View Order Modal =====
+  const openViewOrderModal = (order) => {
+    setViewModal({
+      isOpen: true,
+      order: order,
+    });
+  };
+
+  // ===== ปิด View Order Modal =====
+  const closeViewOrderModal = () => {
+    setViewModal({
+      isOpen: false,
+      order: null,
     });
   };
 
@@ -243,6 +271,7 @@ const AdminOrderList = () => {
                       </td>
                       <td className="p-5 text-right">
                         <button
+                          onClick={() => openViewOrderModal(order)}
                           className="p-2 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors cursor-pointer"
                           title="ดูรายละเอียด"
                         >
@@ -317,6 +346,177 @@ const AdminOrderList = () => {
                 className="flex-1 py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-medium transition-colors cursor-pointer"
               >
                 ยืนยัน
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===== View Details Modal ===== */}
+      {viewModal.isOpen && viewModal.order && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in duration-200">
+            {/* Modal Header */}
+            <div className="sticky top-0 bg-white z-10 p-6 border-b border-gray-100 flex justify-between items-center">
+              <div>
+                <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                  <ShoppingBag className="w-5 h-5 text-emerald-600" />
+                  รายละเอียดคำสั่งซื้อ
+                </h2>
+                <p className="text-sm text-gray-500 font-mono mt-1">
+                  ID: #{viewModal.order._id}
+                </p>
+              </div>
+              <button
+                onClick={closeViewOrderModal}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <X className="w-6 h-6 text-gray-400" />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6 space-y-8">
+              {/* Status Section */}
+              <div className="flex items-center justify-between bg-gray-50 p-4 rounded-xl">
+                <div className="flex items-center gap-2 text-gray-700">
+                  <Calendar className="w-5 h-5 text-gray-400" />
+                  <span className="font-medium">วันที่สั่งซื้อ:</span>
+                  <span>
+                    {new Date(viewModal.order.createdAt).toLocaleDateString(
+                      "th-TH",
+                      {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      },
+                    )}
+                  </span>
+                </div>
+                <span
+                  className={`px-3 py-1.5 rounded-full text-sm font-medium border flex items-center gap-2 ${getStatusColor(
+                    viewModal.order.status,
+                  )}`}
+                >
+                  {getStatusIcon(viewModal.order.status)}
+                  {viewModal.order.status}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Customer Info */}
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                    <User className="w-4 h-4 text-emerald-600" />
+                    ข้อมูลลูกค้า
+                  </h3>
+                  <div className="space-y-3 pl-6 border-l-2 border-gray-100">
+                    <div>
+                      <p className="text-xs text-gray-400">ชื่อผู้รับ</p>
+                      <p className="font-medium text-gray-900">
+                        {viewModal.order.customerDetails?.name || "N/A"}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-400">อีเมล</p>
+                      <p className="text-gray-700">
+                        {viewModal.order.customerDetails?.email || "N/A"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Shipping Address */}
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                    <MapPin className="w-4 h-4 text-emerald-600" />
+                    ที่อยู่จัดส่ง
+                  </h3>
+                  <div className="space-y-1 pl-6 border-l-2 border-gray-100 text-gray-700">
+                    <p>{viewModal.order.customerDetails?.address || "N/A"}</p>
+                    <p>
+                      {viewModal.order.customerDetails?.city}{" "}
+                      {viewModal.order.customerDetails?.zip}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Order Items */}
+              <div>
+                <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                  <Package className="w-4 h-4 text-emerald-600" />
+                  รายการสินค้า
+                </h3>
+                <div className="border border-gray-200 rounded-xl overflow-hidden">
+                  <table className="w-full text-left bg-gray-50/50">
+                    <thead className="bg-gray-100 text-gray-500 text-xs uppercase">
+                      <tr>
+                        <th className="p-3 font-semibold">สินค้า</th>
+                        <th className="p-3 font-semibold text-center">จำนวน</th>
+                        <th className="p-3 font-semibold text-right">ราคา</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {viewModal.order.items.map((item, idx) => (
+                        <tr key={idx} className="bg-white">
+                          <td className="p-3">
+                            <div className="flex items-center gap-3">
+                              {item.imageUrl && (
+                                <img
+                                  src={item.imageUrl}
+                                  alt={item.name}
+                                  className="w-10 h-10 rounded-lg object-cover bg-gray-100 border border-gray-200"
+                                />
+                              )}
+                              <div>
+                                <p className="font-medium text-gray-900 text-sm">
+                                  {item.name}
+                                </p>
+                                {item.customProduct && (
+                                  <span className="text-[10px] bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded border border-purple-200">
+                                    Custom AI
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          </td>
+                          <td className="p-3 text-center text-gray-600 text-sm">
+                            x{item.quantity}
+                          </td>
+                          <td className="p-3 text-right text-gray-900 font-medium text-sm">
+                            ฿{(item.price * item.quantity).toLocaleString()}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                    <tfoot className="bg-gray-50 border-t border-gray-200">
+                      <tr>
+                        <td
+                          colSpan="2"
+                          className="p-3 text-right font-semibold text-gray-700"
+                        >
+                          ยอดรวมทั้งสิ้น
+                        </td>
+                        <td className="p-3 text-right font-bold text-emerald-600 text-lg">
+                          ฿{viewModal.order.totalAmount?.toLocaleString()}
+                        </td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-6 border-t border-gray-100 bg-gray-50 rounded-b-2xl flex justify-end">
+              <button
+                onClick={closeViewOrderModal}
+                className="px-6 py-2 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl font-medium transition-colors shadow-sm cursor-pointer"
+              >
+                ปิดหน้าต่าง
               </button>
             </div>
           </div>
