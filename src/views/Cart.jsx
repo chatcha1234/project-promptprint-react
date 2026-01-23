@@ -37,9 +37,22 @@ const Cart = () => {
     return item.productId;
   };
 
+  // ===== Optimistic Update: อัปเดต UI ก่อน แล้วค่อยเรียก API =====
   const updateQuantity = async (itemId, newQuantity) => {
     if (newQuantity < 1) return;
 
+    // 1. เก็บ state เดิมไว้ก่อน (เผื่อ rollback)
+    const previousCart = cart;
+
+    // 2. อัปเดต state ทันที (ไม่รอ API)
+    setCart((prev) => ({
+      ...prev,
+      items: prev.items.map((item) =>
+        item._id === itemId ? { ...item, quantity: newQuantity } : item,
+      ),
+    }));
+
+    // 3. เรียก API (background)
     try {
       const response = await fetch("/api/cart", {
         method: "PUT",
@@ -50,24 +63,42 @@ const Cart = () => {
           quantity: newQuantity,
         }),
       });
-      if (response.ok) {
-        fetchCart();
+
+      // 4. ถ้า API fail ให้ rollback กลับ
+      if (!response.ok) {
+        setCart(previousCart);
       }
     } catch (error) {
       console.error("Error updating quantity:", error);
+      // Rollback ถ้า error
+      setCart(previousCart);
     }
   };
 
+  // ===== Optimistic Update: ลบ item ออกจาก UI ทันที =====
   const removeItem = async (itemId) => {
+    // 1. เก็บ state เดิมไว้
+    const previousCart = cart;
+
+    // 2. ลบออกจาก state ทันที
+    setCart((prev) => ({
+      ...prev,
+      items: prev.items.filter((item) => item._id !== itemId),
+    }));
+
+    // 3. เรียก API (background)
     try {
       const response = await fetch(`/api/cart/${userId}/${itemId}`, {
         method: "DELETE",
       });
-      if (response.ok) {
-        fetchCart();
+
+      // 4. ถ้า fail ให้ rollback
+      if (!response.ok) {
+        setCart(previousCart);
       }
     } catch (error) {
       console.error("Error removing item:", error);
+      setCart(previousCart);
     }
   };
 
