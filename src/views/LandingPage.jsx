@@ -1,8 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { ArrowRight, Star, Zap, ShieldCheck, Truck } from "lucide-react";
 
 const LandingPage = () => {
+  const isAuthenticated = !!localStorage.getItem("token");
+
+  if (isAuthenticated) {
+    return <Navigate to="/shop" replace />;
+  }
+
   return (
     <div className="min-h-screen bg-white">
       {/* ==================== HERO SECTION ==================== */}

@@ -24,7 +24,7 @@ export default function Login() {
         localStorage.setItem("role", data.role);
         localStorage.setItem("userId", data.userId);
         alert("Login Successful");
-        navigate("/");
+        navigate("/shop");
         window.location.reload(); // Reload to update Navbar state
       } else {
         alert(data.error || "Login Failed");
