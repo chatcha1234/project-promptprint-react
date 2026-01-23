@@ -265,7 +265,7 @@ const UserOrders = () => {
                     </p>
                   </div>
                   <div className="flex gap-3">
-                    {order.status === "pending" && (
+                    {order.status?.toLowerCase() === "pending" && (
                       <button
                         onClick={() => setSelectedOrder(order)}
                         className="flex items-center gap-1 text-emerald-600 hover:text-emerald-700 font-bold text-sm bg-emerald-50 px-3 py-1.5 rounded-lg hover:bg-emerald-100 transition-colors"
