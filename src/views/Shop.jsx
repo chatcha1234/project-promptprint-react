@@ -68,19 +68,19 @@ const Shop = () => {
             backgroundImage: "url(/CommitTeam.png)",
           }}
         >
-          <div className="absolute inset-0 bg-black/50"></div>
+          <div className="absolute inset-0 bg-gray-900/70"></div>
         </div>
         <div className="relative h-full flex flex-col items-center justify-center text-white px-4 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-4 animate-fade-in-up">
             PromptPrint Store
           </h1>
-          <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-2xl animate-fade-in-up delay-100">
+          <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl animate-fade-in-up delay-100">
             เสื้อยืดคุณภาพสูง พร้อมระบบออกแบบ AI ที่ทันสมัยที่สุด
           </p>
           <div className="flex gap-4 animate-fade-in-up delay-200">
             <Link
               to="/ai-design"
-              className="bg-linear-to-r from-purple-600 to-pink-600 text-white px-8 py-3 rounded-full font-bold hover:shadow-lg hover:shadow-purple-500/30 transition-all active:scale-95"
+              className="bg-teal-500 text-white px-8 py-3 rounded-lg font-bold hover:bg-teal-600 hover:shadow-lg transition-all active:scale-95"
             >
               ออกแบบลาย AI ✨
             </Link>
@@ -96,7 +96,7 @@ const Shop = () => {
           </h2>
           <Link
             to="/products"
-            className="text-emerald-600 font-semibold hover:text-emerald-700 hover:underline"
+            className="text-teal-500 font-semibold hover:text-teal-600 hover:underline"
           >
             ดูทั้งหมด &rarr;
           </Link>
@@ -108,9 +108,9 @@ const Shop = () => {
             {[...Array(4)].map((_, i) => (
               <div
                 key={i}
-                className="bg-white rounded-2xl p-4 shadow-xs animate-pulse"
+                className="bg-white rounded-xl p-4 shadow-sm animate-pulse"
               >
-                <div className="h-64 bg-gray-200 rounded-xl mb-4"></div>
+                <div className="h-64 bg-gray-200 rounded-lg mb-4"></div>
                 <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
                 <div className="h-4 bg-gray-200 rounded w-1/2"></div>
               </div>
@@ -121,7 +121,7 @@ const Shop = () => {
             {products.map((product) => (
               <div
                 key={product._id}
-                className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 group flex flex-col"
+                className="bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 group flex flex-col"
               >
                 {/* Image Area */}
                 <div className="h-64 overflow-hidden relative bg-gray-100">
@@ -129,7 +129,7 @@ const Shop = () => {
                     <img
                       src={product.imageUrl}
                       alt={product.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-gray-400">
@@ -137,7 +137,7 @@ const Shop = () => {
                     </div>
                   )}
                   {product.tag && (
-                    <div className="absolute top-2 right-2 bg-black/70 text-white px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-md">
+                    <div className="absolute top-2 right-2 bg-teal-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
                       {product.tag}
                     </div>
                   )}
@@ -152,13 +152,13 @@ const Shop = () => {
                     {product.description}
                   </p>
 
-                  <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-50">
-                    <span className="text-2xl font-bold text-emerald-600">
+                  <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
+                    <span className="text-2xl font-bold text-teal-600">
                       ฿{product.price.toLocaleString()}
                     </span>
                     <button
                       onClick={() => addToCart(product)}
-                      className="bg-gray-900 text-white p-3 rounded-xl hover:bg-emerald-600 transition-colors shadow-lg shadow-gray-200 active:scale-95"
+                      className="bg-teal-500 text-white p-3 rounded-lg hover:bg-teal-600 transition-colors shadow-sm active:scale-95"
                       title="Add to Cart"
                     >
                       <svg
@@ -183,7 +183,7 @@ const Shop = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center py-20 bg-white rounded-3xl border border-gray-100 shadow-sm">
+          <div className="text-center py-20 bg-white rounded-xl border border-gray-100 shadow-sm">
             <p className="text-2xl text-gray-400">ยังไม่มีสินค้าในขณะนี้</p>
           </div>
         )}

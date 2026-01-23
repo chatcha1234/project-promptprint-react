@@ -1,5 +1,4 @@
 import { Link, useNavigate } from "react-router-dom";
-// import { useGoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
 
 export default function Login() {
@@ -25,7 +24,7 @@ export default function Login() {
         localStorage.setItem("userId", data.userId);
         alert("Login Successful");
         navigate("/");
-        window.location.reload(); // Reload to update Navbar state
+        window.location.reload();
       } else {
         alert(data.error || "Login Failed");
       }
@@ -35,32 +34,25 @@ export default function Login() {
     }
   };
 
-  // const loginWithGoogle = useGoogleLogin({
-  //   onSuccess: (tokenResponse) => {
-  //     console.log("Google Login Success:", tokenResponse);
-  //     // ส่ง tokenResponse.access_token ไป backend ได้
-  //   },
-  //   onError: () => {
-  //     console.log("Google Login Failed");
-  //   },
-  // });
-
   return (
     <div
       className="flex justify-center items-center min-h-screen bg-no-repeat bg-cover bg-center"
       style={{ backgroundImage: "url('/bg.jpg')" }}
     >
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-gray-900/60"></div>
+
       <form
         onSubmit={handleLogin}
-        className="flex flex-col gap-4 p-18 rounded-3xl backdrop-blur-xs shadow-xl min-w-87.5"
+        className="relative z-10 flex flex-col gap-4 p-12 rounded-xl bg-white shadow-xl min-w-[360px]"
       >
-        <h2 className="font-bold text-3xl text-center text-white">Login</h2>
+        <h2 className="font-bold text-3xl text-center text-gray-900">Login</h2>
 
         <input
           type="text"
           name="email"
           placeholder="Enter Your Email or Username"
-          className="bg-white py-2 px-3 w-full rounded-xl outline-none"
+          className="bg-gray-50 py-3 px-4 w-full rounded-lg outline-none border border-gray-200 focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all"
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -71,49 +63,32 @@ export default function Login() {
           name="password"
           placeholder="Password"
           minLength={6}
-          className="bg-white py-2 px-3 w-full rounded-xl"
+          className="bg-gray-50 py-3 px-4 w-full rounded-lg border border-gray-200 focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all"
           required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        {/* <Link
-          to="/Forgetpassword"
-          className="text-white underline hover:text-violet-500"
-        >
-          Forget Password?
-        </Link> */}
-
         <button
           type="submit"
-          className="bg-blue-400 text-white font-medium py-2 rounded-xl"
+          className="bg-teal-500 text-white font-medium py-3 rounded-lg hover:bg-teal-600 transition-all"
         >
           Login
         </button>
 
-        <span className="text-white">
+        <span className="text-gray-600 text-center">
           Not have an account?{" "}
-          <Link to="/signup" className="underline hover:text-violet-500">
+          <Link
+            to="/signup"
+            className="text-teal-500 hover:text-teal-600 font-medium"
+          >
             Sign Up Here
           </Link>
         </span>
 
-        {/* <button
-          type="button"
-          onClick={() => loginWithGoogle()}
-          className="flex items-center justify-center gap-2 bg-white text-black py-2 px-4 rounded-xl shadow hover:bg-gray-100"
-        >
-          <img
-            src="https://developers.google.com/identity/images/g-logo.png"
-            alt="Google"
-            className="w-5 h-5"
-          />
-          Log In With Google
-        </button> */}
-
         <Link
           to="/"
-          className="bg-gray-300 text-black py-2 rounded-xl text-center hover:bg-gray-400 transition-colors"
+          className="bg-gray-100 text-gray-700 py-3 rounded-lg text-center hover:bg-gray-200 transition-colors font-medium"
         >
           Back to Home
         </Link>

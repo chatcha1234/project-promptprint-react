@@ -43,7 +43,7 @@ const Navbar = ({ onMenuClick }) => {
       <nav
         className={`sticky top-0 z-40 w-full transition-all duration-300 ${
           isScrolled
-            ? "bg-white/80 backdrop-blur-md shadow-sm border-b border-gray-100"
+            ? "bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-200"
             : "bg-white border-b border-gray-100"
         }`}
       >
@@ -62,10 +62,7 @@ const Navbar = ({ onMenuClick }) => {
                 </button>
               </div>
 
-              <Link
-                to="/"
-                className="text-2xl font-bold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
-              >
+              <Link to="/" className="text-2xl font-bold text-gray-900">
                 PromptPrint
               </Link>
             </div>
@@ -77,12 +74,12 @@ const Navbar = ({ onMenuClick }) => {
             <div className="flex items-center gap-2 sm:gap-4">
               <div className="h-6 w-px bg-gray-200 hidden lg:block" />
 
-              <button className="p-2 text-gray-600 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors relative group">
+              <button className="p-2 text-gray-600 hover:text-red-500 hover:bg-gray-50 rounded-lg transition-colors relative group">
                 <Heart className="w-6 h-6" />
               </button>
 
               <Link to="/cart">
-                <button className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors relative">
+                <button className="p-2 text-gray-600 hover:text-teal-500 hover:bg-gray-50 rounded-lg transition-colors relative">
                   <ShoppingBag className="w-6 h-6" />
                 </button>
               </Link>
@@ -113,7 +110,7 @@ const Navbar = ({ onMenuClick }) => {
                       <Link
                         to="/ai-design"
                         onClick={() => setIsProfileOpen(false)}
-                        className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                        className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-teal-500 transition-colors"
                       >
                         <Package className="w-4 h-4" />
                         AI Design
@@ -121,7 +118,7 @@ const Navbar = ({ onMenuClick }) => {
                       <Link
                         to={`/orders/${localStorage.getItem("userId")}`}
                         onClick={() => setIsProfileOpen(false)}
-                        className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                        className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-teal-500 transition-colors"
                       >
                         <ClipboardList className="w-4 h-4" />
                         My Orders
@@ -179,7 +176,7 @@ const Navbar = ({ onMenuClick }) => {
               ) : (
                 <Link
                   to="/login"
-                  className="flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gray-900 text-white rounded-full text-sm font-medium hover:bg-gray-800 hover:shadow-lg hover:shadow-gray-900/20 transition-all transform hover:-translate-y-0.5"
+                  className="flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-teal-500 text-white rounded-lg text-sm font-medium hover:bg-teal-600 hover:shadow-lg transition-all transform hover:-translate-y-0.5"
                 >
                   <User className="w-4 h-4" />
                   <span className="hidden sm:inline">Sign In</span>

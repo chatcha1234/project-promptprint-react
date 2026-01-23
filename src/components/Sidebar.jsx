@@ -91,11 +91,11 @@ const Sidebar = ({ isOpen, onClose, variant = "drawer" }) => {
             } p-6 border-b border-gray-100 transition-all`}
           >
             <Link to="/" className="flex items-center gap-2 group">
-              <div className="w-8 h-8 bg-linear-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center text-white font-bold shadow-lg shadow-blue-500/30 group-hover:scale-105 transition-transform shrink-0">
+              <div className="w-8 h-8 bg-teal-500 rounded-lg flex items-center justify-center text-white font-bold shadow-sm group-hover:scale-105 transition-transform shrink-0">
                 P
               </div>
               {!isCollapsed && (
-                <span className="text-xl font-bold bg-linear-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent group-hover:from-blue-600 group-hover:to-indigo-600 transition-all whitespace-nowrap">
+                <span className="text-xl font-bold text-gray-900 group-hover:text-teal-500 transition-all whitespace-nowrap">
                   PromptPrint
                 </span>
               )}
@@ -116,7 +116,7 @@ const Sidebar = ({ isOpen, onClose, variant = "drawer" }) => {
           {!isDrawer && (
             <button
               onClick={() => setIsCollapsed(!isCollapsed)}
-              className="absolute -right-3 top-30 z-50 p-1.5 bg-white border border-gray-200 text-gray-400 hover:text-blue-600 rounded-full shadow-lg transition-all hover:scale-110 flex items-center justify-center cursor-pointer"
+              className="absolute -right-3 top-30 z-50 p-1.5 bg-white border border-gray-200 text-gray-400 hover:text-teal-500 rounded-full shadow-sm transition-all hover:scale-110 flex items-center justify-center cursor-pointer"
               title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
             >
               {isCollapsed ? (
@@ -148,7 +148,7 @@ const Sidebar = ({ isOpen, onClose, variant = "drawer" }) => {
                   title={isCollapsed ? item.name : ""}
                   className={`group flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
                     isActive
-                      ? "bg-red-50 text-red-600 font-medium"
+                      ? "bg-teal-50 text-teal-600 font-medium"
                       : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                   } ${item.disabled ? "opacity-40 cursor-not-allowed pointer-events-none" : ""} ${
                     isCollapsed ? "justify-center" : ""
@@ -157,7 +157,7 @@ const Sidebar = ({ isOpen, onClose, variant = "drawer" }) => {
                   <span
                     className={`transition-colors shrink-0 ${
                       isActive
-                        ? "text-red-600"
+                        ? "text-teal-600"
                         : "text-gray-400 group-hover:text-gray-600"
                     }`}
                   >
@@ -167,7 +167,7 @@ const Sidebar = ({ isOpen, onClose, variant = "drawer" }) => {
                     <span className="whitespace-nowrap">{item.name}</span>
                   )}
                   {isActive && !isCollapsed && (
-                    <div className="ml-auto w-1.5 h-1.5 rounded-full bg-red-600" />
+                    <div className="ml-auto w-1.5 h-1.5 rounded-full bg-teal-500" />
                   )}
                 </Link>
               );
