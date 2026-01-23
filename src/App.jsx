@@ -23,7 +23,6 @@ import ResetPassword from "./views/ResetPassword";
 import LandingPage from "./views/LandingPage"; //New code from Juang
 
 const App = () => {
-
   const isAuthenticated = !!localStorage.getItem("token");
 
   return (
@@ -40,11 +39,44 @@ const App = () => {
       <Route path="/" element={<Layout />}>
         {/* ถ้า login แล้วให้ไป Home ถ้ายังไม่ login ให้ไป LandingPage */}
         <Route index element={isAuthenticated ? <Home /> : <LandingPage />} />
+        <Route path="Home" element={<Home />} />
         <Route path="products" element={<ProductList />} />
-        <Route path="admin/products" element={<AdminProduct />} />
-        <Route path="admin/manage-products" element={<AdminProductList />} />
-        <Route path="admin/users" element={<AdminUserList />} />
-        <Route path="admin/orders" element={<AdminOrderList />} />
+
+        {/* ===== Admin Routes (ต้องเป็น Admin เท่านั้น) ===== */}
+        <Route
+          path="admin/products"
+          element={
+            <ProtectedRoute requireAdmin={true}>
+              <AdminProduct />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="admin/manage-products"
+          element={
+            <ProtectedRoute requireAdmin={true}>
+              <AdminProductList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="admin/users"
+          element={
+            <ProtectedRoute requireAdmin={true}>
+              <AdminUserList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="admin/orders"
+          element={
+            <ProtectedRoute requireAdmin={true}>
+              <AdminOrderList />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ===== User Routes (ต้อง Login) ===== */}
         <Route
           path="cart"
           element={
@@ -70,6 +102,8 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
+        {/* ===== Public Routes ===== */}
         <Route path="about" element={<About />} />
         <Route path="faqs" element={<Faqs />} />
         <Route path="membership" element={<Membership />} />
