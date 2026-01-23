@@ -11,12 +11,12 @@ const AdminOrderList = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/orders`,
+          `${import.meta.env.VITE_API_URL}/admin/orders`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
         const data = await response.json();
         setOrders(data);
@@ -35,7 +35,7 @@ const AdminOrderList = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/orders/${orderId}/status`,
+        `${import.meta.env.VITE_API_URL}/admin/orders/${orderId}/status`,
         {
           method: "PUT",
           headers: {
@@ -43,15 +43,15 @@ const AdminOrderList = () => {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ status: newStatus }),
-        }
+        },
       );
 
       if (response.ok) {
         // Update local state
         setOrders(
           orders.map((order) =>
-            order._id === orderId ? { ...order, status: newStatus } : order
-          )
+            order._id === orderId ? { ...order, status: newStatus } : order,
+          ),
         );
       } else {
         alert("Failed to update status");
@@ -168,7 +168,7 @@ const AdminOrderList = () => {
                         <div className="relative group/status">
                           <button
                             className={`flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(
-                              order.status
+                              order.status,
                             )}`}
                           >
                             {getStatusIcon(order.status)}
