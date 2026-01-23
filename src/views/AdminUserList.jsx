@@ -16,7 +16,7 @@ const AdminUserList = () => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
         const data = await response.json();
         setUsers(data);
@@ -34,7 +34,7 @@ const AdminUserList = () => {
   const handleDelete = async (userId) => {
     if (
       !window.confirm(
-        "Are you sure you want to delete this user? This action cannot be undone."
+        "Are you sure you want to delete this user? This action cannot be undone.",
       )
     )
       return;
@@ -48,7 +48,7 @@ const AdminUserList = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (response.ok) {
@@ -154,7 +154,7 @@ const AdminUserList = () => {
                       </td>
                       <td className="p-5 text-gray-500 text-sm">
                         {new Date(
-                          user.createdAt || Date.now()
+                          user.createdAt || new Date(),
                         ).toLocaleDateString()}
                       </td>
                       <td className="p-5">

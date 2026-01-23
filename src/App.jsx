@@ -24,8 +24,6 @@ import ResetPassword from "./views/ResetPassword";
 import UserOrders from "./views/UserOrders"; // หน้า My Orders
 
 const App = () => {
-  const isAuthenticated = !!localStorage.getItem("token");
-
   return (
     <Routes>
       {/* Auth pages - Full width with navbar only, no sidebar */}

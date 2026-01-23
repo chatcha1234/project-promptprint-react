@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
-
-  // Get or create userId for guest cart
   const [userId] = useState(() => {
     let stored = localStorage.getItem("userId");
     if (!stored) {

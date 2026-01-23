@@ -17,29 +17,32 @@ const Cart = () => {
   const userId = localStorage.getItem("userId");
   const navigate = useNavigate();
 
+  // ===== ดึงข้อมูลตะกร้าจาก API =====
+  const fetchCart = React.useCallback(
+    async (isInitial = false) => {
+      if (!userId) return;
+      if (isInitial) setLoading(true);
+
+      try {
+        const response = await fetch(`/api/cart/${userId}`);
+        const data = await response.json();
+        setCart(data);
+      } catch (error) {
+        console.error("Error fetching cart:", error);
+      } finally {
+        if (isInitial) setLoading(false);
+      }
+    },
+    [userId],
+  );
+
   useEffect(() => {
     if (userId) {
       fetchCart(true);
     } else {
       setLoading(false);
     }
-  }, [userId]);
-
-  // ===== ดึงข้อมูลตะกร้าจาก API =====
-  const fetchCart = async (isInitial = false) => {
-    if (!userId) return;
-    if (isInitial) setLoading(true);
-
-    try {
-      const response = await fetch(`/api/cart/${userId}`);
-      const data = await response.json();
-      setCart(data);
-    } catch (error) {
-      console.error("Error fetching cart:", error);
-    } finally {
-      if (isInitial) setLoading(false);
-    }
-  };
+  }, [userId, fetchCart]);
 
   // Helper to get product data
   const getProductData = (item) => {
