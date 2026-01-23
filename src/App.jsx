@@ -20,7 +20,7 @@ import Faqs from "./views/Faqs";
 import Membership from "./views/Membership";
 import ForgetPassword from "./views/ForgetPassword";
 import ResetPassword from "./views/ResetPassword";
-import LandingPage from "./views/LandingPage"; //New code from Juang
+
 import UserOrders from "./views/UserOrders"; // หน้า My Orders
 
 const App = () => {
@@ -38,8 +38,8 @@ const App = () => {
 
       {/* Main layout with sidebar */}
       <Route path="/" element={<Layout />}>
-        {/* ถ้า login แล้วให้ไป Home ถ้ายังไม่ login ให้ไป LandingPage */}
-        <Route index element={isAuthenticated ? <Home /> : <LandingPage />} />
+        {/* Default Route: Always Home */}
+        <Route index element={<Home />} />
         <Route path="Home" element={<Home />} />
         <Route path="products" element={<ProductList />} />
 
