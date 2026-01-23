@@ -21,7 +21,12 @@ const Shop = () => {
           `${import.meta.env.VITE_API_URL}/api/products`,
         );
         const data = await response.json();
-        setProducts(data);
+        if (Array.isArray(data)) {
+          setProducts(data);
+        } else {
+          console.error("Invalid products data format:", data);
+          setProducts([]);
+        }
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching products:", error);
