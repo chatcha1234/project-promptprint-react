@@ -156,7 +156,7 @@ const Checkout = () => {
           </p>
           <Link
             to="/login"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-xl font-medium hover:bg-emerald-700 transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-xl font-medium hover:bg-emerald-700 transition-colors cursor-pointer"
           >
             เข้าสู่ระบบ
           </Link>
@@ -279,7 +279,7 @@ const Checkout = () => {
               <button
                 type="submit"
                 disabled={processing}
-                className={`w-full mt-4 py-4 rounded-xl font-bold text-lg transition-all shadow-lg flex items-center justify-center gap-2 ${
+                className={`w-full mt-4 py-4 rounded-xl font-bold text-lg transition-all shadow-lg flex items-center justify-center gap-2 cursor-pointer ${
                   processing
                     ? "bg-gray-400 cursor-not-allowed text-white"
                     : "bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-600/20"
