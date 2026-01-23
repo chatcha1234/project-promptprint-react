@@ -466,6 +466,77 @@ const AdminOrderList = () => {
                   </span>
                 </div>
 
+                {/* ===== Payment Verification Section ===== */}
+                {viewModal.order.paymentSlipUrl && (
+                  <div className="bg-orange-50 rounded-xl p-6 border border-orange-100">
+                    <h3 className="font-bold text-orange-800 mb-4 flex items-center gap-2">
+                      <CreditCard className="w-5 h-5" />
+                      Verify Payment Slip
+                    </h3>
+
+                    <div className="flex flex-col md:flex-row gap-6 items-start">
+                      <div className="relative group">
+                        <img
+                          src={viewModal.order.paymentSlipUrl}
+                          alt="Payment Slip"
+                          className="max-h-64 rounded-lg border border-gray-200 shadow-sm cursor-pointer hover:scale-105 transition-transform"
+                          onClick={() =>
+                            window.open(
+                              viewModal.order.paymentSlipUrl,
+                              "_blank",
+                            )
+                          }
+                        />
+                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-lg pointer-events-none">
+                          <span className="bg-white/90 px-3 py-1 rounded-full text-xs font-bold shadow-sm">
+                            Click to Zoom
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex-1 space-y-4">
+                        <div className="bg-white p-4 rounded-lg border border-orange-100">
+                          <p className="text-sm text-gray-500">Amount to Pay</p>
+                          <p className="text-2xl font-bold text-gray-900">
+                            ฿{viewModal.order.totalAmount?.toLocaleString()}
+                          </p>
+                        </div>
+
+                        {viewModal.order.status === "Payment Verification" && (
+                          <div className="flex gap-3">
+                            <button
+                              onClick={() => {
+                                openConfirmModal(
+                                  viewModal.order._id,
+                                  "Processing",
+                                  viewModal.order.status,
+                                );
+                                closeViewOrderModal();
+                              }}
+                              className="flex-1 py-3 bg-emerald-600 text-white font-bold rounded-lg hover:bg-emerald-700 hover:shadow-lg hover:shadow-emerald-500/30 transition-all"
+                            >
+                              Approve Payment
+                            </button>
+                            <button
+                              onClick={() => {
+                                openConfirmModal(
+                                  viewModal.order._id,
+                                  "Pending",
+                                  viewModal.order.status,
+                                ); // Reject back to pending or cancelled
+                                closeViewOrderModal();
+                              }}
+                              className="px-4 py-3 bg-white border border-red-200 text-red-600 font-bold rounded-lg hover:bg-red-50 transition-colors"
+                            >
+                              Reject
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {/* Customer Info */}
                   <div>

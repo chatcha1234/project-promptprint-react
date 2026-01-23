@@ -70,32 +70,8 @@ const Navbar = ({ onMenuClick }) => {
               </Link>
             </div>
 
-            {/* Center: Main Navigation */}
-            <div className="hidden md:flex items-center gap-8">
-              <Link
-                to="/home"
-                className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
-                title="Your Dashboard"
-              >
-                Home
-              </Link>
-              <Link
-                to="/shop"
-                className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
-                title="Browse Products"
-              >
-                Shop
-              </Link>
-              <Link
-                to="/ai-design"
-                className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors flex items-center gap-1"
-              >
-                AI Design{" "}
-                <span className="text-xs bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded-full">
-                  New
-                </span>
-              </Link>
-            </div>
+            {/* Center: Main Navigation - REMOVED as redundant with Sidebar */}
+            <div className="hidden md:flex items-center gap-8"></div>
 
             {/* Right: Actions */}
             <div className="flex items-center gap-2 sm:gap-4">
