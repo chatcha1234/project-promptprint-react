@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./components/Layout";
 import AuthLayout from "./components/AuthLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -27,6 +27,8 @@ import LandingPage from "./views/LandingPage";
 import UserOrders from "./views/UserOrders"; // หน้า My Orders
 
 const App = () => {
+  const isAuthenticated = !!localStorage.getItem("token");
+
   return (
     <Routes>
       {/* Auth pages - Full width with navbar only, no sidebar */}
@@ -39,7 +41,13 @@ const App = () => {
 
       {/* Public Layout (Landing Page, About, etc.) - No Sidebar */}
       <Route element={<PublicLayout />}>
-        <Route path="/" element={<LandingPage />} />
+        {/* Landing: Show for guests, redirect to /shop for logged-in users */}
+        <Route
+          path="/"
+          element={
+            isAuthenticated ? <Navigate to="/shop" replace /> : <LandingPage />
+          }
+        />
         <Route path="about" element={<About />} />
         <Route path="faqs" element={<Faqs />} />
         <Route path="membership" element={<Membership />} />
