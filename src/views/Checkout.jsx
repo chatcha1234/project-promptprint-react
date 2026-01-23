@@ -156,7 +156,7 @@ const Checkout = () => {
           </p>
           <Link
             to="/login"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-xl font-medium hover:bg-emerald-700 transition-colors"
           >
             เข้าสู่ระบบ
           </Link>
@@ -190,7 +190,7 @@ const Checkout = () => {
           {/* ===== Form Section ===== */}
           <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-lg">
             <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-blue-600" />
+              <MapPin className="w-5 h-5 text-emerald-600" />
               ข้อมูลการจัดส่ง
             </h2>
 
@@ -207,7 +207,7 @@ const Checkout = () => {
                   value={formData.fullName}
                   onChange={handleChange}
                   placeholder="กรอกชื่อ-นามสกุล"
-                  className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all placeholder-gray-400"
+                  className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all placeholder-gray-400"
                 />
               </div>
 
@@ -223,7 +223,7 @@ const Checkout = () => {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="example@email.com"
-                  className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all placeholder-gray-400"
+                  className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all placeholder-gray-400"
                 />
               </div>
 
@@ -239,7 +239,7 @@ const Checkout = () => {
                   value={formData.address}
                   onChange={handleChange}
                   placeholder="บ้านเลขที่ ถนน ตำบล/แขวง"
-                  className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all placeholder-gray-400"
+                  className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all placeholder-gray-400"
                 />
               </div>
 
@@ -256,7 +256,7 @@ const Checkout = () => {
                     value={formData.city}
                     onChange={handleChange}
                     placeholder="กรุงเทพฯ"
-                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all placeholder-gray-400"
+                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all placeholder-gray-400"
                   />
                 </div>
                 <div>
@@ -270,7 +270,7 @@ const Checkout = () => {
                     value={formData.zip}
                     onChange={handleChange}
                     placeholder="10110"
-                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all placeholder-gray-400"
+                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all placeholder-gray-400"
                   />
                 </div>
               </div>
@@ -282,7 +282,7 @@ const Checkout = () => {
                 className={`w-full mt-4 py-4 rounded-xl font-bold text-lg transition-all shadow-lg flex items-center justify-center gap-2 ${
                   processing
                     ? "bg-gray-400 cursor-not-allowed text-white"
-                    : "bg-blue-600 hover:bg-blue-700 text-white shadow-blue-600/20"
+                    : "bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-600/20"
                 }`}
               >
                 {processing ? (
@@ -304,7 +304,7 @@ const Checkout = () => {
           <div className="space-y-6">
             <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-lg">
               <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                <ShoppingBag className="w-5 h-5 text-blue-600" />
+                <ShoppingBag className="w-5 h-5 text-emerald-600" />
                 สินค้าในตะกร้า
               </h2>
 
@@ -345,7 +345,7 @@ const Checkout = () => {
                             จำนวน: {item.quantity}
                           </p>
                         </div>
-                        <span className="font-bold text-blue-600">
+                        <span className="font-bold text-emerald-600">
                           ฿
                           {(
                             (product?.price || 0) * item.quantity

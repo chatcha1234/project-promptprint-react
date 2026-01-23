@@ -126,7 +126,7 @@ const Cart = () => {
           </p>
           <Link
             to="/login"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-xl font-medium hover:bg-emerald-700 transition-colors"
           >
             เข้าสู่ระบบ
           </Link>
@@ -166,7 +166,7 @@ const Cart = () => {
             </p>
             <button
               onClick={() => navigate("/products")}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-xl font-medium hover:bg-emerald-700 transition-colors"
             >
               <ShoppingBag className="w-5 h-5" />
               ไปช้อปปิ้ง
@@ -211,7 +211,7 @@ const Cart = () => {
                       <p className="text-gray-500 text-sm line-clamp-2 mb-2">
                         {product?.description}
                       </p>
-                      <p className="text-lg font-bold text-blue-600">
+                      <p className="text-lg font-bold text-emerald-600">
                         ฿{product?.price?.toLocaleString()}
                       </p>
                     </div>
@@ -273,14 +273,14 @@ const Cart = () => {
 
                 <div className="flex justify-between text-xl font-bold text-gray-900 pt-4 border-t border-gray-100 mb-6">
                   <span>ยอดรวมทั้งหมด</span>
-                  <span className="text-blue-600">
+                  <span className="text-emerald-600">
                     ฿{calculateTotal().toLocaleString()}
                   </span>
                 </div>
 
                 <button
                   onClick={() => navigate("/checkout")}
-                  className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-lg transition-colors shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2"
+                  className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-lg transition-colors shadow-lg shadow-emerald-600/20 flex items-center justify-center gap-2"
                 >
                   ดำเนินการชำระเงิน
                   <ArrowRight className="w-5 h-5" />
