@@ -14,7 +14,7 @@ import {
   Menu,
 } from "lucide-react";
 
-const Navbar = ({ onMenuClick }) => {
+const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [user, setUser] = useState(() => localStorage.getItem("username"));
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -50,48 +50,43 @@ const Navbar = ({ onMenuClick }) => {
         {/* Main Header Container */}
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
-            {/* Left area */}
+            {/* Left area: Logo & Brand */}
             <div className="flex items-center gap-4">
-              {/* Mobile Menu Button - STRICTLY HIDDEN ON DESKTOP */}
-              <div className="lg:hidden">
-                <button
-                  onClick={onMenuClick}
-                  className="p-2 -ml-2 text-gray-600 hover:text-gray-900"
-                >
-                  <Menu className="w-6 h-6" />
-                </button>
-              </div>
+              <Link
+                to="/"
+                className="text-2xl font-bold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
+              >
+                PromptPrint
+              </Link>
             </div>
 
-            {/* Center: Search Bar */}
-            <div className="hidden md:flex flex-1 max-w-2xl mx-8">
-              <div className="relative w-full group">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Search className="w-5 h-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
-                </div>
-                <input
-                  type="text"
-                  className="block w-full pl-11 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-full leading-5 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 sm:text-sm"
-                  placeholder="Search for custom prompts, designs..."
-                />
-              </div>
+            {/* Center: Main Navigation */}
+            <div className="hidden md:flex items-center gap-8">
+              <Link
+                to="/"
+                className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
+              >
+                Home
+              </Link>
+              <Link
+                to="/shop"
+                className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
+              >
+                Shop
+              </Link>
+              <Link
+                to="/ai-design"
+                className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors flex items-center gap-1"
+              >
+                AI Design{" "}
+                <span className="text-xs bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded-full">
+                  New
+                </span>
+              </Link>
             </div>
 
             {/* Right: Actions */}
             <div className="flex items-center gap-2 sm:gap-4">
-              <Link
-                to="/about"
-                className="hidden lg:block text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors"
-              >
-                About
-              </Link>
-              <Link
-                to="/faqs"
-                className="hidden lg:block text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors"
-              >
-                FAQs
-              </Link>
-
               <div className="h-6 w-px bg-gray-200 hidden lg:block" />
 
               <button className="p-2 text-gray-600 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors relative group">

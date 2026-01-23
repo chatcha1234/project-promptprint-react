@@ -21,6 +21,7 @@ import Membership from "./views/Membership";
 import ForgetPassword from "./views/ForgetPassword";
 import ResetPassword from "./views/ResetPassword";
 
+import LandingPage from "./views/LandingPage";
 import UserOrders from "./views/UserOrders"; // หน้า My Orders
 
 const App = () => {
@@ -36,11 +37,13 @@ const App = () => {
 
       {/* Main layout with sidebar */}
       <Route path="/" element={<Layout />}>
-        {/* Default Route: Always Home */}
-        <Route index element={<Home />} />
-        <Route path="Home" element={<Home />} />
+        {/* Default Route: New Landing Page */}
+        <Route index element={<LandingPage />} />
+        {/* Shop Routes */}
+        <Route path="shop" element={<Home />} />
+        <Route path="home" element={<Home />} />{" "}
+        {/* Keep for backward compatibility */}
         <Route path="products" element={<ProductList />} />
-
         {/* ===== Admin Routes (ต้องเป็น Admin เท่านั้น) ===== */}
         <Route
           path="admin/products"
@@ -74,7 +77,6 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-
         {/* ===== User Routes (ต้อง Login) ===== */}
         <Route
           path="cart"
@@ -109,7 +111,6 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-
         {/* ===== Public Routes ===== */}
         <Route path="about" element={<About />} />
         <Route path="faqs" element={<Faqs />} />
