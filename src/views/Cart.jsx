@@ -9,15 +9,18 @@ const Cart = () => {
 
   useEffect(() => {
     if (userId) {
-      fetchCart();
+      fetchCart(true); // true = initial load, แสดง Loading
     } else {
       setLoading(false);
     }
   }, [userId]);
 
-  const fetchCart = async () => {
+  // ===== ดึงข้อมูลตะกร้าจาก API =====
+  // isInitial = true เฉพาะตอนโหลดครั้งแรก (แสดง Loading)
+  const fetchCart = async (isInitial = false) => {
     if (!userId) return;
-    setLoading(true);
+    if (isInitial) setLoading(true); // แสดง Loading เฉพาะตอนโหลดครั้งแรก
+
     try {
       const response = await fetch(`/api/cart/${userId}`);
       const data = await response.json();
@@ -25,7 +28,7 @@ const Cart = () => {
     } catch (error) {
       console.error("Error fetching cart:", error);
     } finally {
-      setLoading(false);
+      if (isInitial) setLoading(false);
     }
   };
 
