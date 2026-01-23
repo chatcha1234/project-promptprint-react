@@ -61,10 +61,6 @@ const Navbar = ({ onMenuClick }) => {
                   <Menu className="w-6 h-6" />
                 </button>
               </div>
-
-              <Link to="/" className="text-2xl font-bold text-gray-900">
-                PromptPrint
-              </Link>
             </div>
 
             {/* Center: Main Navigation - REMOVED as redundant with Sidebar */}
