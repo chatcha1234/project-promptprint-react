@@ -69,6 +69,14 @@ const App = () => {
           }
         />
         <Route
+          path="admin/products/edit/:id"
+          element={
+            <ProtectedRoute requireAdmin={true}>
+              <AdminProduct />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="admin/manage-products"
           element={
             <ProtectedRoute requireAdmin={true}>

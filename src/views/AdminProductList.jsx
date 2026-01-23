@@ -11,7 +11,7 @@ const AdminProductList = () => {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/products`
+          `${import.meta.env.VITE_API_URL}/api/products`,
         );
         const data = await response.json();
         setProducts(data);
@@ -33,13 +33,13 @@ const AdminProductList = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/products/${productId}`,
+        `${import.meta.env.VITE_API_URL}/api/admin/products/${productId}`,
         {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (response.ok) {
@@ -150,14 +150,14 @@ const AdminProductList = () => {
                       </td>
                       <td className="p-5">
                         <div className="flex items-center justify-end gap-2">
-                          {/* Edit Button (Placeholder for now) */}
-                          <button
-                            disabled
-                            className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors cursor-not-allowed opacity-50"
-                            title="Edit feature coming soon"
+                          {/* Edit Button */}
+                          <Link
+                            to={`/admin/products/edit/${product._id}`}
+                            className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                            title="Edit Product"
                           >
                             <Edit className="w-4 h-4" />
-                          </button>
+                          </Link>
 
                           {/* Delete Button */}
                           <button

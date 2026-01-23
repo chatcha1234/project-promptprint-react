@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   ArrowLeft,
   Save,
@@ -12,6 +12,9 @@ import {
 
 export default function AdminProduct() {
   const navigate = useNavigate();
+  const { id } = useParams(); // Get product ID from URL if editing
+  const isEditing = Boolean(id);
+
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -20,6 +23,39 @@ export default function AdminProduct() {
     tag: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Fetch product data if editing
+  useEffect(() => {
+    if (isEditing) {
+      const fetchProduct = async () => {
+        setIsLoading(true);
+        try {
+          const response = await fetch(
+            `${import.meta.env.VITE_API_URL}/api/products`,
+          );
+          const products = await response.json();
+          const product = products.find((p) => p._id === id); // Simple find from list or fetch specific
+
+          if (product) {
+            setFormData({
+              name: product.name,
+              description: product.description,
+              price: product.price,
+              imageUrl: product.imageUrl,
+              tag: product.tag || "",
+            });
+          }
+        } catch (error) {
+          console.error("Error fetching product:", error);
+          alert("Failed to load product details");
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      fetchProduct();
+    }
+  }, [id, isEditing]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -36,23 +72,30 @@ export default function AdminProduct() {
     }
 
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/admin/products`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const url = isEditing
+        ? `${import.meta.env.VITE_API_URL}/api/admin/products/${id}`
+        : `${import.meta.env.VITE_API_URL}/api/admin/products`;
+
+      const method = isEditing ? "PUT" : "POST";
+
+      const response = await fetch(url, {
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(formData),
+      });
 
       if (response.ok) {
-        alert("Product Created Successfully!");
+        alert(
+          isEditing
+            ? "Product Updated Successfully!"
+            : "Product Created Successfully!",
+        );
         navigate("/admin/manage-products"); // Redirect to list after success
       } else {
-        alert("Failed to create product");
+        alert("Failed to save product");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -61,6 +104,14 @@ export default function AdminProduct() {
       setIsSubmitting(false);
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-gray-500">Loading product data...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 p-6 md:p-12">
@@ -75,10 +126,12 @@ export default function AdminProduct() {
           </Link>
           <div>
             <h1 className="text-3xl font-bold bg-linear-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-              Add New Product
+              {isEditing ? "Edit Product" : "Add New Product"}
             </h1>
             <p className="text-gray-500 text-sm mt-1">
-              Create a new item for your inventory
+              {isEditing
+                ? "Update existing product details"
+                : "Create a new item for your inventory"}
             </p>
           </div>
         </div>
@@ -182,7 +235,7 @@ export default function AdminProduct() {
                                 Authorization: `Bearer ${token}`,
                               },
                               body: formData,
-                            }
+                            },
                           );
                           const data = await response.json();
                           if (data.imageUrl) {
@@ -232,10 +285,11 @@ export default function AdminProduct() {
                 className="w-full bg-linear-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-500/20 transition-all transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isSubmitting ? (
-                  "Creating..."
+                  "Saving..."
                 ) : (
                   <>
-                    <Save className="w-5 h-5" /> Create Product
+                    <Save className="w-5 h-5" />{" "}
+                    {isEditing ? "Update Product" : "Create Product"}
                   </>
                 )}
               </button>
