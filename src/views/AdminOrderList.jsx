@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Eye,
   Package,
@@ -19,7 +19,7 @@ import {
 
 const AdminOrderList = () => {
   const [orders, setOrders] = useState([]);
-  const [filteredOrders, setFilteredOrders] = useState([]);
+  // Removed duplicate declaration
   const [isLoading, setIsLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState("All");
 
@@ -52,7 +52,7 @@ const AdminOrderList = () => {
         );
         const data = await response.json();
         setOrders(data);
-        setFilteredOrders(data);
+        setOrders(data);
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching orders:", error);
@@ -64,15 +64,11 @@ const AdminOrderList = () => {
   }, []);
 
   // ===== Filter Orders =====
-  useEffect(() => {
-    if (activeFilter === "All") {
-      setFilteredOrders(orders);
-    } else {
-      setFilteredOrders(
-        orders.filter((order) => order.status === activeFilter),
-      );
-    }
-  }, [activeFilter, orders]);
+  // ===== Filter Orders with useMemo =====
+  const filteredOrders = useMemo(() => {
+    if (activeFilter === "All") return orders;
+    return orders.filter((order) => order.status === activeFilter);
+  }, [orders, activeFilter]);
 
   // ===== เปิด Confirm Modal =====
   const openConfirmModal = (orderId, newStatus, currentStatus) => {
