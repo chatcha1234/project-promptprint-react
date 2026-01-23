@@ -196,10 +196,10 @@ const Navbar = ({ onMenuClick }) => {
               ) : (
                 <Link
                   to="/login"
-                  className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-gray-900 text-white rounded-full text-sm font-medium hover:bg-gray-800 hover:shadow-lg hover:shadow-gray-900/20 transition-all transform hover:-translate-y-0.5"
+                  className="flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gray-900 text-white rounded-full text-sm font-medium hover:bg-gray-800 hover:shadow-lg hover:shadow-gray-900/20 transition-all transform hover:-translate-y-0.5"
                 >
                   <User className="w-4 h-4" />
-                  <span>Sign In</span>
+                  <span className="hidden sm:inline">Sign In</span>
                 </Link>
               )}
             </div>
