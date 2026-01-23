@@ -14,7 +14,7 @@ import {
   Menu,
 } from "lucide-react";
 
-const Navbar = () => {
+const Navbar = ({ onMenuClick }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [user, setUser] = useState(() => localStorage.getItem("username"));
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -52,6 +52,16 @@ const Navbar = () => {
           <div className="flex items-center justify-between h-20">
             {/* Left area: Logo & Brand */}
             <div className="flex items-center gap-4">
+              {/* Mobile Menu Button - STRICTLY HIDDEN ON DESKTOP */}
+              <div className="lg:hidden">
+                <button
+                  onClick={onMenuClick}
+                  className="p-2 -ml-2 text-gray-600 hover:text-gray-900"
+                >
+                  <Menu className="w-6 h-6" />
+                </button>
+              </div>
+
               <Link
                 to="/"
                 className="text-2xl font-bold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
