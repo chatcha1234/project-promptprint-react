@@ -3,8 +3,10 @@ import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import AuthLayout from "./components/AuthLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
+import PublicLayout from "./components/PublicLayout";
 
 import Home from "./views/Home";
+import Shop from "./views/Shop"; // Was Home
 import Login from "./views/Login";
 import Register from "./views/Register";
 import AiDesign from "./views/AiDesign";
@@ -35,15 +37,20 @@ const App = () => {
         <Route path="resetpassword" element={<ResetPassword />} />
       </Route>
 
-      {/* Main layout with sidebar */}
-      <Route path="/" element={<Layout />}>
-        {/* Default Route: New Landing Page */}
-        <Route index element={<LandingPage />} />
-        {/* Shop Routes */}
-        <Route path="shop" element={<Home />} />
-        <Route path="home" element={<Home />} />{" "}
-        {/* Keep for backward compatibility */}
+      {/* Public Layout (Landing Page, About, etc.) - No Sidebar */}
+      <Route element={<PublicLayout />}>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="about" element={<About />} />
+        <Route path="faqs" element={<Faqs />} />
+        <Route path="membership" element={<Membership />} />
+      </Route>
+
+      {/* Main Layout (App Dashboard) - With Sidebar */}
+      <Route element={<Layout />}>
+        <Route path="home" element={<Home />} />
+        <Route path="shop" element={<Shop />} />
         <Route path="products" element={<ProductList />} />
+
         {/* ===== Admin Routes (ต้องเป็น Admin เท่านั้น) ===== */}
         <Route
           path="admin/products"
@@ -77,6 +84,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
         {/* ===== User Routes (ต้อง Login) ===== */}
         <Route
           path="cart"
@@ -111,10 +119,6 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        {/* ===== Public Routes ===== */}
-        <Route path="about" element={<About />} />
-        <Route path="faqs" element={<Faqs />} />
-        <Route path="membership" element={<Membership />} />
       </Route>
 
       {/* 404 */}

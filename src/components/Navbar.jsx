@@ -73,14 +73,16 @@ const Navbar = ({ onMenuClick }) => {
             {/* Center: Main Navigation */}
             <div className="hidden md:flex items-center gap-8">
               <Link
-                to="/"
+                to="/home"
                 className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
+                title="Your Dashboard"
               >
                 Home
               </Link>
               <Link
                 to="/shop"
                 className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
+                title="Browse Products"
               >
                 Shop
               </Link>
