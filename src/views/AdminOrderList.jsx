@@ -82,6 +82,7 @@ const AdminOrderList = () => {
 
   // ===== เปิด View Order Modal =====
   const openViewOrderModal = (order) => {
+    console.log("Opening view modal for order:", order);
     setViewModal({
       isOpen: true,
       order: order,
@@ -460,7 +461,7 @@ const AdminOrderList = () => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
-                      {viewModal.order.items.map((item, idx) => (
+                      {viewModal.order.items?.map((item, idx) => (
                         <tr key={idx} className="bg-white">
                           <td className="p-3">
                             <div className="flex items-center gap-3">
