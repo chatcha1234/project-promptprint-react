@@ -50,9 +50,9 @@ const ProductList = () => {
   };
 
   return (
-    <div className="container mx-auto p-6 min-h-screen bg-black text-white">
+    <div className="container mx-auto p-6 min-h-screen  text-white">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-4xl font-extrabold bg-linear-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent">
+        <h1 className="text-4xl font-extrabold bg-linear-to-r from-blue-600 to-cyan-400 bg-clip-text text-transparent">
           Shop Collection
         </h1>
         <button

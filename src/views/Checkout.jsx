@@ -138,7 +138,7 @@ const Checkout = () => {
           <p className="text-xl mb-4">Please login to checkout</p>
           <button
             onClick={() => navigate("/login")}
-            className="px-6 py-2 bg-yellow-500 rounded-lg hover:bg-yellow-400 transition-colors"
+            className="px-6 py-2 bg-blue-600 rounded-lg hover:bg-blue-400 transition-colors"
           >
             Login
           </button>
@@ -148,8 +148,8 @@ const Checkout = () => {
   }
 
   return (
-    <div className="container mx-auto p-6 min-h-screen bg-black text-white">
-      <h1 className="text-3xl font-bold mb-8 text-center bg-linear-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
+    <div className="container mx-auto p-6 min-h-screen text-white">
+      <h1 className="text-3xl font-bold mb-8 text-center bg-linear-to-r from-blue-600 to-cyan-400 bg-clip-text text-transparent">
         Secure Checkout
       </h1>
 
@@ -159,7 +159,7 @@ const Checkout = () => {
           <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-yellow-500"
+              className="h-6 w-6 text-cyan-400"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -189,7 +189,7 @@ const Checkout = () => {
                 type="text"
                 name="fullName"
                 onChange={handleChange}
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 focus:outline-none focus:border-yellow-500 transition-colors"
+                className="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 focus:outline-none focus:border-cyan-500 transition-colors"
               />
             </div>
             <div>
@@ -199,7 +199,7 @@ const Checkout = () => {
                 type="email"
                 name="email"
                 onChange={handleChange}
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 focus:outline-none focus:border-yellow-500 transition-colors"
+                className="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 focus:outline-none focus:border-cyan-500 transition-colors"
               />
             </div>
             <div>
@@ -211,7 +211,7 @@ const Checkout = () => {
                 type="text"
                 name="address"
                 onChange={handleChange}
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 focus:outline-none focus:border-yellow-500 transition-colors"
+                className="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 focus:outline-none focus:border-cyan-500 transition-colors"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -222,7 +222,7 @@ const Checkout = () => {
                   type="text"
                   name="city"
                   onChange={handleChange}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 focus:outline-none focus:border-yellow-500 transition-colors"
+                  className="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 focus:outline-none focus:border-cyan-500 transition-colors"
                 />
               </div>
               <div>
@@ -234,7 +234,7 @@ const Checkout = () => {
                   type="text"
                   name="zip"
                   onChange={handleChange}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 focus:outline-none focus:border-yellow-500 transition-colors"
+                  className="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 focus:outline-none focus:border-cyan-500 transition-colors"
                 />
               </div>
             </div>
@@ -245,7 +245,7 @@ const Checkout = () => {
               className={`w-full mt-6 py-4 rounded-xl font-bold text-lg transition-all shadow-lg shadow-orange-900/20 ${
                 processing
                   ? "bg-gray-600 cursor-not-allowed"
-                  : "bg-linear-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700"
+                  : "bg-linear-to-r from-blue-600 to-cyan-400 hover:from-blue-700 "
               }`}
             >
               {processing

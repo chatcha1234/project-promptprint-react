@@ -109,7 +109,7 @@ const LandingPage = () => {
                 key={product.id} 
                 className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer hover:-translate-y-1"
     >
-      <div className="h-48 md:h-64 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center overflow-hidden">
+      <div className="h-48 md:h-64 bg-linear-to-br from-gray-200 to-gray-300 flex items-center justify-center overflow-hidden">
         <img 
           src={`/${product.image}`}
           alt={product.name}

@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useGoogleLogin } from "@react-oauth/google";
+// import { useGoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
 
 export default function Login() {
@@ -35,15 +35,15 @@ export default function Login() {
     }
   };
 
-  const loginWithGoogle = useGoogleLogin({
-    onSuccess: (tokenResponse) => {
-      console.log("Google Login Success:", tokenResponse);
-      // ส่ง tokenResponse.access_token ไป backend ได้
-    },
-    onError: () => {
-      console.log("Google Login Failed");
-    },
-  });
+  // const loginWithGoogle = useGoogleLogin({
+  //   onSuccess: (tokenResponse) => {
+  //     console.log("Google Login Success:", tokenResponse);
+  //     // ส่ง tokenResponse.access_token ไป backend ได้
+  //   },
+  //   onError: () => {
+  //     console.log("Google Login Failed");
+  //   },
+  // });
 
   return (
     <div
@@ -52,7 +52,7 @@ export default function Login() {
     >
       <form
         onSubmit={handleLogin}
-        className="flex flex-col gap-4 p-18 rounded-3xl backdrop-blur-xs shadow-xl min-w-[350px]"
+        className="flex flex-col gap-4 p-18 rounded-3xl backdrop-blur-xs shadow-xl min-w-87.5"
       >
         <h2 className="font-bold text-3xl text-center text-white">Login</h2>
 
@@ -77,12 +77,12 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <Link
+        {/* <Link
           to="/Forgetpassword"
           className="text-white underline hover:text-violet-500"
         >
           Forget Password?
-        </Link>
+        </Link> */}
 
         <button
           type="submit"
@@ -98,7 +98,7 @@ export default function Login() {
           </Link>
         </span>
 
-        <button
+        {/* <button
           type="button"
           onClick={() => loginWithGoogle()}
           className="flex items-center justify-center gap-2 bg-white text-black py-2 px-4 rounded-xl shadow hover:bg-gray-100"
@@ -109,7 +109,7 @@ export default function Login() {
             className="w-5 h-5"
           />
           Log In With Google
-        </button>
+        </button> */}
 
         <Link
           to="/"

@@ -1,20 +1,20 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useGoogleLogin } from "@react-oauth/google";
+// import { useGoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
 
 export default function Register() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
 
-  const loginWithGoogle = useGoogleLogin({
-    onSuccess: (tokenResponse) => {
-      console.log("Google Login Success:", tokenResponse);
-      // ส่ง tokenResponse.access_token ไป backend ได้
-    },
-    onError: () => {
-      console.log("Google Login Failed");
-    },
-  });
+  // const loginWithGoogle = useGoogleLogin({
+  //   onSuccess: (tokenResponse) => {
+  //     console.log("Google Login Success:", tokenResponse);
+  //     // ส่ง tokenResponse.access_token ไป backend ได้
+  //   },
+  //   onError: () => {
+  //     console.log("Google Login Failed");
+  //   },
+  // });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -124,7 +124,7 @@ export default function Register() {
 
         <hr />
 
-        <button
+        {/* <button
           type="button"
           onClick={() => loginWithGoogle()}
           className="flex items-center justify-center gap-2 bg-white text-black py-2 px-4 rounded-xl shadow hover:bg-gray-100"
@@ -135,7 +135,7 @@ export default function Register() {
             className="w-5 h-5"
           />
           Log In With Google
-        </button>
+        </button> */}
 
         <Link
           to="/"

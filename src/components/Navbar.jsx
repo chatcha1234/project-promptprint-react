@@ -126,6 +126,26 @@ const Navbar = ({ onMenuClick }) => {
                   {/* Dropdown Menu */}
                   {isProfileOpen && (
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 animate-in fade-in slide-in-from-top-2 duration-200 z-50">
+                      {/* New code:22JAN25 ----------- */}
+                      <Link
+                        to="/ai-design"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                      >
+                        <Package className="w-4 h-4" />
+                        AI Design
+                      </Link>
+                      <Link
+                        to={`/orders/${localStorage.getItem("userId")}`}
+                        onClick={() => setIsProfileOpen(false)}
+                        className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                      >
+                        <ClipboardList className="w-4 h-4" />
+                        My Orders
+                      </Link>
+                      {/* Divider */}
+                      <div className="border-t border-gray-100 my-1"></div>
+                      {/* New code:22JAN25 ---------- */}
                       {localStorage.getItem("role") === "admin" && (
                         <>
                           <Link
@@ -187,7 +207,7 @@ const Navbar = ({ onMenuClick }) => {
         </div>
 
         {/* Secondary Navigation (Categories) */}
-        <div className="border-t border-gray-100 bg-white/50 backdrop-blur-sm hidden md:block">
+        {/* <div className="border-t border-gray-100 bg-white/50 backdrop-blur-sm hidden md:block">
           <div className="w-full px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-8 h-12 text-sm overflow-x-auto no-scrollbar">
               {[
@@ -216,7 +236,7 @@ const Navbar = ({ onMenuClick }) => {
               <div className="flex-1" />
             </div>
           </div>
-        </div>
+        </div> */}
       </nav>
     </>
   );
