@@ -1,16 +1,74 @@
-# React + Vite
+# PromptPrint — Professional Print-on-Demand E-Commerce 👕🎨
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An advanced, full-featured E-commerce platform for custom print-on-demand products. Built with **React**, **Vite**, and **Tailwind CSS**, this project provides a modern shopping experience with dynamic product customization and a seamless user interface.
 
-Currently, two official plugins are available:
+[![React](https://img.shields.io/badge/React-19.0-61DAFB?logo=react)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-7.0-646CFF?logo=vite)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.0-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
+[![React Router](https://img.shields.io/badge/React_Router-7.0-CA4245?logo=react-router)](https://reactrouter.com/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🌟 Key Features
 
-## React Compiler
+- **Dynamic Product Customization**: Intuitive tools for users to preview and customize print-on-demand merchandise.
+- **Modern E-Commerce Workflow**: Complete shopping experience from product discovery to secure checkout.
+- **Rich User Interface**: Sleek, responsive design built with Tailwind CSS, featuring smooth transitions and interactive elements.
+- **Optimized Performance**: Leveraging Vite for lightning-fast HMR and optimized production builds.
+- **Scalable Architecture**: Refined component-based structure for ease of maintenance and feature expansion.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠️ Tech Stack
 
-## Expanding the ESLint configuration
+- **Frontend**: React 19 (Hooks, Functional Components)
+- **Routing**: React Router 7
+- **Styling**: Tailwind CSS v4
+- **Icons**: Lucide React
+- **Development Tooling**: Vite, ESLint
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18.x or higher
+- npm or yarn
+
+### Installation
+
+1. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/chatcha1234/project-promptprint-react.git
+   cd project-promptprint-react
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   npm install
+   ```
+
+3. **Run Development Server**
+
+   ```bash
+   npm run dev
+   ```
+
+4. **Build for Production**
+   ```bash
+   npm run build
+   ```
+
+## 🏗️ Project Structure
+
+```
+├── src/
+│   ├── components/      # Reusable UI components
+│   ├── pages/           # Page-level components
+│   ├── App.jsx          # Main application component & Routing
+│   ├── main.jsx         # Application entry point
+│   └── index.css        # Global styles & Tailwind configuration
+├── public/              # Static assets and images
+└── package.json         # Project dependencies & scripts
+```
+
+---
+
+_Transforming prompts into high-quality custom merchandise._
